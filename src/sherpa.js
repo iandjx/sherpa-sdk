@@ -5,6 +5,7 @@ import {
   generateProofSherpa
 } from "./snark-functions";
 import networkConfig from "./networkConfig";
+const assert = require("assert");
 
 export const state = () => {
   return {
@@ -283,7 +284,7 @@ export const getters = {
   getNoteContractInfo: state => parsedNote => {
     return state.contracts.filter(contract => {
       return (
-        contract.label === parsedNote.amount &&
+        contract.value == parsedNote.amount && //todo changed from  contract.label === parsedNote.amount &&
         contract.token === parsedNote.currency &&
         contract.chainId === parsedNote.netId
       );
@@ -295,11 +296,16 @@ export const getters = {
     })[0];
   },
   getSherpaProxyContract: state => {
-    return ($nuxt.$config.chainId == 43114)
-      ? state.sherpaProxyContract.mainnet : state.sherpaProxyContract.fuji
+    return state.sherpaProxyContract.fuji
+
+    //todo fix  -- env should be used instead of nuxt?
+    // return ($nuxt.$config.chainId == 43114)
+    //   ? state.sherpaProxyContract.mainnet : state.sherpaProxyContract.fuji
   },
   getSelectedRelayer: state => {
-    return state.relayersList.find(relayer => relayer.id === state.selectedRelayerId);
+    return state.relayersList[0]
+    //todo fix
+    // return state.relayersList.find(relayer => relayer.id === state.selectedRelayerId);
   },
   getRelayersList: state => {
     return state.relayersList.filter(relayer => relayer.chainId === $nuxt.$config.chainId);
@@ -376,7 +382,6 @@ const sherpaProxyABI = [{
   "inputs": [{"name":"_sherpa","type":"address"},{"name":"_commitment","type":"bytes32"},{"name":"_encryptedNote","type":"bytes"}],
   "outputs": []
 }
-  // "function deposit(address _sherpa, bytes32 _commitment, bytes _encryptedNote) external payable",
 ]
 
 
@@ -397,8 +402,32 @@ export async function sendDeposit(web3, value, sherpaProxyContractAddress, chain
     });
 }
 
-export async function withdraw(withdrawNote, withdrawAddress, relayerMode, chainId) {
-  let web3;
+//todo move
+const ethSherpaABI = [{
+  "type":"function",
+  "name":"isSpent",
+  "inputs": [{"name":"_nullifierHash","type":"bytes32"}],
+  "outputs": [{
+    "internalType": "bool",
+    "name": "",
+    "type": "bool"
+  }]
+},
+  {
+    "type":"function",
+    "name":"isKnownRoot",
+    "inputs": [{"name":"_root","type":"bytes32"}],
+    "outputs": [{
+      "internalType": "bool",
+      "name": "",
+      "type": "bool"
+    }]
+  }
+
+]
+
+export async function withdraw(withdrawNote, withdrawAddress, relayerMode, chainId, web3, events) {
+  // let web3;
   const parsedNote = parseNote(withdrawNote);
   const addressRegex = /^0x[a-fA-F0-9]{40}/g
   const match = addressRegex.exec(withdrawAddress)
@@ -410,27 +439,28 @@ export async function withdraw(withdrawNote, withdrawAddress, relayerMode, chain
   if(relayerMode) {
     const id = chainId;
     const network = { ...networkConfig[`chainId${id}`], id: Number(id) };
-    web3 = new Web3(network.rpcUrls.Figment.url);
+    // web3 = new Web3(network.rpcUrls.Figment.url);//todo Figment? - maybe move this logic to calling function?
   } else {
-    web3 = this.$manager.web3;
-    assert(parsedNote.netId === await web3.eth.getChainId(), "Your wallet is not configured to the correct network.")
+    // web3 = this.$manager.web3;
+    // assert(parsedNote.netId === await web3.eth.getChainId(), "Your wallet is not configured to the correct network.")//todo redo
   }
   // console.log("parsedNote", parsedNote);
   // console.log("hex commitment", toHex(parsedNote.deposit.commitment));
-  const contractInfo = getters.getNoteContractInfo(parsedNote);
-  let sherpaProxyContractAddress = getters.getSherpaProxyContract;
+  const contractInfo = getters.getNoteContractInfo(state())(parsedNote);
+  let sherpaProxyContractAddress = getters.getSherpaProxyContract(state());
   const pitContract = new web3.eth.Contract(
     sherpaProxyABI,
     sherpaProxyContractAddress
   );
+
 
   const sherpaContract = new web3.eth.Contract(
     ethSherpaABI,
     contractInfo.contractAddress
   );
 
-  const relayer = getters.getSelectedRelayer;
-  const relayerFee = BigInt(relayer.status.tornadoServiceFee*10000).mul(BigInt(contractInfo.value)).div(BigInt(1000000))
+  const relayer = getters.getSelectedRelayer(state());
+  const relayerFee = BigInt(0)//todo BigInt(relayer.status.tornadoServiceFee*10000).mul(BigInt(contractInfo.value)).div(BigInt(1000000))
   const gas = BigInt(225*350000)
   let totalFee = relayerFee.add(gas)
   let rewardAccount = relayer.status.rewardAccount
@@ -440,7 +470,8 @@ export async function withdraw(withdrawNote, withdrawAddress, relayerMode, chain
     rewardAccount = 0
     refundAmount = 0
   }
-  assert(parsedNote.netId === relayer.chainId || parsedNote.netId === '*', 'This relayer is for a different network')
+  // assert(parsedNote.netId === relayer.chainId || parsedNote.netId === '*', 'This relayer is for a different network')
+  //todo where does events come from?
   const { proof, args } = await generateProofSherpa(sherpaContract, parsedNote.deposit, withdrawAddress, events.depositEvents, rewardAccount, totalFee, refundAmount)
   const requestBody = {
     proof: proof,

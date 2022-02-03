@@ -4,10 +4,10 @@ const { bigInt } = require("snarkjs");
 const assert = require("assert");
 const buildGroth16 = require("websnark/src/groth16");
 const websnarkUtils = require("websnark/src/utils");
-const merkleTree = {}// require("./lib/merkleTree");//todo changed
+const merkleTree = {}// require("./lib/merkleTree");//todo need a copy of this file
 
 const MERKLE_TREE_HEIGHT = 20;
-// const keccak256 = require("keccak256");//todo changed
+// const keccak256 = require("keccak256");//todo not needed?
 
 
 const rbigint = nbytes => bigInt.leBuff2int(randomBytes(nbytes));
@@ -51,7 +51,7 @@ export function parseNote(noteString) {
   const match = noteRegex.exec(noteString);
 
   if (!match) {
-    throw new Error("The note has invalid format");
+    throw new Error("The note has invalid format"+ JSON.stringify(noteString));
   }
 
   const buf = Buffer.from(match.groups.note, "hex");
