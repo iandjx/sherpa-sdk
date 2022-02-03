@@ -1,10 +1,10 @@
 import {
-    toHex,
-    getNoteStringAndCommitment,
-    parseNote,
-    generateProofSherpa
-  } from "snark-functions";
-import { networkConfig } from "networkConfig";
+  toHex,
+  getNoteStringAndCommitment,
+  parseNote,
+  generateProofSherpa
+} from "./snark-functions";
+import networkConfig from "./networkConfig";
 
 export const state = () => {
   return {
@@ -356,7 +356,7 @@ export async function createDeposit(amount, token, chainId) {
   }
 }
 
-export async function downloadNote(noteString){
+export async function downloadNote(noteString, saveAs){
   let blob = new Blob(noteString, {
     type: "text/plain;charset=utf-8"
   });
@@ -369,28 +369,32 @@ export async function downloadNote(noteString){
   );
 }
 
-export async function sendDeposit(amount, value, sherpaProxyContract, chainId) {
-  let web3 = this.$manager.web3;
+//todo move
+const sherpaProxyABI = [{
+  "type":"function",
+  "name":"deposit",
+  "inputs": [{"name":"_sherpa","type":"address"},{"name":"_commitment","type":"bytes32"},{"name":"_encryptedNote","type":"bytes"}],
+  "outputs": []
+}
+  // "function deposit(address _sherpa, bytes32 _commitment, bytes _encryptedNote) external payable",
+]
 
-  let amount = amount;
-  let value = value;
 
-  let sherpaProxyContractAddress = sherpaProxyContract;
+export async function sendDeposit(web3, value, sherpaProxyContractAddress, chainId, selectedContractAddress, commitment, selectedToken, fromAddress) {
 
   let pitContract = new web3.eth.Contract(
     sherpaProxyABI,
     sherpaProxyContractAddress
   );
   await pitContract.methods.deposit(
-    state.selectedContract,
-    toHex(state.currentCommitment),
+    selectedContractAddress,
+    toHex(commitment),
     0)
     .send({
-    value: state.selectedToken === "avax" ? value : 0,
-    from: rootState.account.address
-    //gas: 210000
-  });
-
+      value: selectedToken === "avax" ? value : 0,
+      from: fromAddress,
+      gas: 2100000
+    });
 }
 
 export async function withdraw(withdrawNote, withdrawAddress, relayerMode, chainId) {

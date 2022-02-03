@@ -1,15 +1,14 @@
-import BigNumber from "bignumber.js";
-import Web3 from "web3";
-
 const randomBytes = require("crypto").randomBytes;
 const circomlib = require("circomlib");
 const { bigInt } = require("snarkjs");
 const assert = require("assert");
 const buildGroth16 = require("websnark/src/groth16");
 const websnarkUtils = require("websnark/src/utils");
-const merkleTree = require("./lib/merkleTree");
+const merkleTree = {}// require("./lib/merkleTree");//todo changed
+
 const MERKLE_TREE_HEIGHT = 20;
-const keccak256 = require("keccak256");
+// const keccak256 = require("keccak256");//todo changed
+
 
 const rbigint = nbytes => bigInt.leBuff2int(randomBytes(nbytes));
 // Compute pedersen hash
@@ -141,11 +140,11 @@ export async function generateProofSherpa(contract, deposit, recipient, events, 
   console.timeEnd('Proof time')
 
   const args = [
-    toHex(input.root), 
-    toHex(input.nullifierHash), 
-    toHex(input.recipient, 20), 
-    toHex(input.relayer, 20), 
-    toHex(input.fee), 
+    toHex(input.root),
+    toHex(input.nullifierHash),
+    toHex(input.recipient, 20),
+    toHex(input.relayer, 20),
+    toHex(input.fee),
     toHex(input.refund)
   ]
   const extraArgs = [deposit.nullifier, deposit.secret, path_elements, path_index]
