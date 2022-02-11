@@ -379,9 +379,28 @@ export async function downloadNote(noteString, saveAs){
 const sherpaProxyABI = [{
   "type":"function",
   "name":"deposit",
-  "inputs": [{"name":"_sherpa","type":"address"},{"name":"_commitment","type":"bytes32"},{"name":"_encryptedNote","type":"bytes"}],
+  "inputs": [
+    {"name":"_sherpa","type":"address"},
+    {"name":"_commitment","type":"bytes32"},
+    {"name":"_encryptedNote","type":"bytes"}
+    ],
   "outputs": []
-}
+},
+  {
+    "type":"function",
+    "name":"withdraw",
+    "inputs": [
+      {"name":"_sherpa","type":"address"},
+      {"name":"_proof","type":"bytes"},
+      {"name":"_root","type":"bytes32"},
+      {"name":"_nullifierHash","type":"bytes32"},
+      {"name":"_recipient","type":"address"},
+      {"name":"_relayer","type":"address"},
+      {"name":"_fee","type":"uint256"},
+      {"name":"_refund","type":"uint256"},
+    ],
+    "outputs": []
+  }
 ]
 
 
@@ -426,7 +445,7 @@ const ethSherpaABI = [{
 
 ]
 
-export async function withdraw(withdrawNote, withdrawAddress, relayerMode, chainId, web3, events) {
+export async function withdraw(withdrawNote, withdrawAddress, relayerMode, chainId, web3, events, circuit, provingKey) {
   // let web3;
   const parsedNote = parseNote(withdrawNote);
   const addressRegex = /^0x[a-fA-F0-9]{40}/g
@@ -463,7 +482,7 @@ export async function withdraw(withdrawNote, withdrawAddress, relayerMode, chain
   const relayerFee = BigInt(0)//todo BigInt(relayer.status.tornadoServiceFee*10000).mul(BigInt(contractInfo.value)).div(BigInt(1000000))
   const gas = BigInt(225*350000)
   let totalFee = relayerFee.add(gas)
-  let rewardAccount = relayer.status.rewardAccount
+  let rewardAccount = relayer.status.rewardAccount//todo currently undefined - but we are not using a relayer for now
   let refundAmount = 0 //parsedNote.amount * (10**18)
   if(relayerMode){
     totalFee = 0
@@ -471,8 +490,7 @@ export async function withdraw(withdrawNote, withdrawAddress, relayerMode, chain
     refundAmount = 0
   }
   // assert(parsedNote.netId === relayer.chainId || parsedNote.netId === '*', 'This relayer is for a different network')
-  //todo where does events come from?
-  const { proof, args } = await generateProofSherpa(sherpaContract, parsedNote.deposit, withdrawAddress, events.depositEvents, rewardAccount, totalFee, refundAmount)
+  const { proof, args } = await generateProofSherpa(sherpaContract, parsedNote.deposit, withdrawAddress, events.depositEvents, circuit, provingKey, rewardAccount, totalFee, refundAmount)
   const requestBody = {
     proof: proof,
     contract: contractInfo.contractAddress,

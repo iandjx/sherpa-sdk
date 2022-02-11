@@ -4,7 +4,8 @@ const { bigInt } = require("snarkjs");
 const assert = require("assert");
 const buildGroth16 = require("websnark/src/groth16");
 const websnarkUtils = require("websnark/src/utils");
-const merkleTree = {}// require("./lib/merkleTree");//todo need a copy of this file
+const merkleTree = require("./lib/merkleTree");
+const fetch =require("node-fetch-commonjs")
 
 const MERKLE_TREE_HEIGHT = 20;
 // const keccak256 = require("keccak256");//todo not needed?
@@ -111,7 +112,7 @@ export async function generateMerkleProofSherpa(events, deposit, contract) {
   // Compute merkle proof of our commitment
   return tree.path(leafIndex);
 }
-export async function generateProofSherpa(contract, deposit, recipient, events, relayer = 0, fee = 0, refund = 0) {
+export async function generateProofSherpa(contract, deposit, recipient, events, circuit, provingKey, relayer = 0, fee = 0, refund = 0) {
   // Compute Merkle proof of commitment
   const {root, path_elements, path_index} = await generateMerkleProofSherpa(events, deposit, contract)
   const input = {
@@ -130,12 +131,10 @@ export async function generateProofSherpa(contract, deposit, recipient, events, 
     pathIndices: path_index,
   }
   const groth16 = await buildGroth16();
-  const circuit = await (await fetch('/withdraw.json')).json()
-  const proving_key = await (await fetch('/withdraw_proving_key.bin')).arrayBuffer()
 
   console.log('Generating SNARK proof')
   console.time('Proof time')
-  const proofData = await websnarkUtils.genWitnessAndProve(groth16, input, circuit, proving_key)
+  const proofData = await websnarkUtils.genWitnessAndProve(groth16, input, circuit, provingKey)
   const {proof} = websnarkUtils.toSolidityInput(proofData)
   console.timeEnd('Proof time')
 
