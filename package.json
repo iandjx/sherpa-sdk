@@ -21,6 +21,6 @@
     "node-fetch-commonjs": "^3.1.1",
     "snarkjs": "^0.2.0",
     "web3": "^1.7.0",
-    "websnark": "github:poma/websnark"
+    "websnark": "github:sherpa-cash/websnark"
   }
 }
