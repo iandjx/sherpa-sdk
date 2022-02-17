@@ -4,7 +4,7 @@ module.exports = {
   },
   preset:"ts-jest/presets/js-with-ts",
   // setupFilesAfterEnv: ['./jest.setup.js'],
-  testEnvironment: "node",
+  testEnvironment: "jsdom",
   testRegex: "./.*\\.(test|spec)?\\.(ts|ts|js)$",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
 };

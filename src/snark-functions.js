@@ -5,7 +5,6 @@ const assert = require("assert");
 const buildGroth16 = require("websnark/src/groth16");
 const websnarkUtils = require("websnark/src/utils");
 const merkleTree = require("./lib/merkleTree");
-const fetch =require("node-fetch-commonjs")
 
 const MERKLE_TREE_HEIGHT = 20;
 // const keccak256 = require("keccak256");//todo not needed?

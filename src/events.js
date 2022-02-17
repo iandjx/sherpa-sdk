@@ -2,7 +2,6 @@ import { toHex } from "./snark-functions";
 import Web3 from "web3";
 import networkConfig from './networkConfig'
 import { createClient } from '@urql/core';
-const fetch =require("node-fetch-commonjs")
 
 export const state = () => {
   return {
