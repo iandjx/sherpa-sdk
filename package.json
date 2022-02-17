@@ -17,10 +17,19 @@
   "dependencies": {
     "@urql/core": "^2.4.1",
     "circomlib": "^0.2.0",
+    "crypto": "^1.0.1",
     "dotenv": "^16.0.0",
+    "http": "^0.0.1-security",
+    "https": "^1.0.0",
+    "net": "^1.0.2",
     "node-fetch-commonjs": "^3.1.1",
+    "path": "^0.12.7",
     "snarkjs": "^0.2.0",
+    "stream": "^0.0.2",
+    "url": "^0.11.0",
     "web3": "^1.7.0",
-    "websnark": "github:sherpa-cash/websnark"
+    "websnark": "github:sherpa-cash/websnark",
+    "worker-threads": "^1.0.0",
+    "zlib": "^1.0.5"
   }
 }
