@@ -5,13 +5,11 @@ const assert = require("assert");
 const buildGroth16 = require("websnark/src/groth16");
 const websnarkUtils = require("websnark/src/utils");
 const merkleTree = require("./lib/merkleTree");
-const fetch =require("node-fetch-commonjs")
 
 const MERKLE_TREE_HEIGHT = 20;
 // const keccak256 = require("keccak256");//todo not needed?
 
-
-const rbigint = nbytes => bigInt.leBuff2int(randomBytes(nbytes));
+const rbigint = (nbytes) => bigInt.leBuff2int(randomBytes(nbytes));
 // Compute pedersen hash
 export function pedersenHash(data) {
   console.log("pedersen data");
@@ -36,7 +34,7 @@ export function getNoteStringAndCommitment(currency, amount, netId) {
   // get snarks note and commitment
   const preimage = Buffer.concat([
     nullifier.leInt2Buff(31),
-    secret.leInt2Buff(31)
+    secret.leInt2Buff(31),
   ]);
   console.log("preimage", preimage);
   let commitment = pedersenHash(preimage);
@@ -48,11 +46,12 @@ export function getNoteStringAndCommitment(currency, amount, netId) {
 }
 
 export function parseNote(noteString) {
-  const noteRegex = /sherpa-(?<currency>\w+)-(?<amount>[\d.]+)-(?<netId>\d+)-0x(?<note>[0-9a-fA-F]{124})/g;
+  const noteRegex =
+    /sherpa-(?<currency>\w+)-(?<amount>[\d.]+)-(?<netId>\d+)-0x(?<note>[0-9a-fA-F]{124})/g;
   const match = noteRegex.exec(noteString);
 
   if (!match) {
-    throw new Error("The note has invalid format"+ JSON.stringify(noteString));
+    throw new Error("The note has invalid format" + JSON.stringify(noteString));
   }
 
   const buf = Buffer.from(match.groups.note, "hex");
@@ -65,7 +64,7 @@ export function parseNote(noteString) {
     currency: match.groups.currency,
     amount: match.groups.amount,
     netId,
-    deposit
+    deposit,
   };
 }
 
@@ -74,24 +73,24 @@ export function createDeposit({ nullifier, secret }) {
   let deposit = { nullifier, secret };
   deposit.preimage = Buffer.concat([
     deposit.nullifier.leInt2Buff(31),
-    deposit.secret.leInt2Buff(31)
+    deposit.secret.leInt2Buff(31),
   ]);
   deposit.commitment = pedersenHash(deposit.preimage);
-  deposit.commitmentHex = toHex(deposit.commitment)
+  deposit.commitmentHex = toHex(deposit.commitment);
   deposit.nullifierHash = pedersenHash(deposit.nullifier.leInt2Buff(31));
-  deposit.nullifierHex = toHex(deposit.nullifierHash)
+  deposit.nullifierHex = toHex(deposit.nullifierHash);
   return deposit;
 }
 
 export async function generateMerkleProofSherpa(events, deposit, contract) {
   // Get all deposit events from smart contract and assemble merkle tree from them
 
-  const leaves = events.map(e => e.commitment);
+  const leaves = events.map((e) => e.commitment);
 
   const tree = new merkleTree(MERKLE_TREE_HEIGHT, leaves.reverse());
 
   const depositEvent = events.find(
-    e => e.commitment === toHex(deposit.commitment)
+    (e) => e.commitment === toHex(deposit.commitment)
   );
 
   const leafIndex = depositEvent ? depositEvent.leafIndex : -1;
@@ -112,9 +111,23 @@ export async function generateMerkleProofSherpa(events, deposit, contract) {
   // Compute merkle proof of our commitment
   return tree.path(leafIndex);
 }
-export async function generateProofSherpa(contract, deposit, recipient, events, circuit, provingKey, relayer = 0, fee = 0, refund = 0) {
+export async function generateProofSherpa(
+  contract,
+  deposit,
+  recipient,
+  events,
+  circuit,
+  provingKey,
+  relayer = 0,
+  fee = 0,
+  refund = 0
+) {
   // Compute Merkle proof of commitment
-  const {root, path_elements, path_index} = await generateMerkleProofSherpa(events, deposit, contract)
+  const { root, path_elements, path_index } = await generateMerkleProofSherpa(
+    events,
+    deposit,
+    contract
+  );
   const input = {
     // Public snark inputs
     root: root,
@@ -129,14 +142,19 @@ export async function generateProofSherpa(contract, deposit, recipient, events, 
     secret: deposit.secret,
     pathElements: path_elements,
     pathIndices: path_index,
-  }
+  };
   const groth16 = await buildGroth16();
 
-  console.log('Generating SNARK proof')
-  console.time('Proof time')
-  const proofData = await websnarkUtils.genWitnessAndProve(groth16, input, circuit, provingKey)
-  const {proof} = websnarkUtils.toSolidityInput(proofData)
-  console.timeEnd('Proof time')
+  console.log("Generating SNARK proof");
+  console.time("Proof time");
+  const proofData = await websnarkUtils.genWitnessAndProve(
+    groth16,
+    input,
+    circuit,
+    provingKey
+  );
+  const { proof } = websnarkUtils.toSolidityInput(proofData);
+  console.timeEnd("Proof time");
 
   const args = [
     toHex(input.root),
@@ -144,8 +162,13 @@ export async function generateProofSherpa(contract, deposit, recipient, events, 
     toHex(input.recipient, 20),
     toHex(input.relayer, 20),
     toHex(input.fee),
-    toHex(input.refund)
-  ]
-  const extraArgs = [deposit.nullifier, deposit.secret, path_elements, path_index]
-  return { proof, args, extraArgs }
+    toHex(input.refund),
+  ];
+  const extraArgs = [
+    deposit.nullifier,
+    deposit.secret,
+    path_elements,
+    path_index,
+  ];
+  return { proof, args, extraArgs };
 }
