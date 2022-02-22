@@ -15,7 +15,7 @@ const fromAddress = web3.eth.accounts.privateKeyToAccount(testPrivKey).address
 web3.eth.accounts.wallet.add(testPrivKey)
 const sherpaProxyAddress = "0xC0EB087ac8C732AC23c52A16627c4539d8966d79"//fuji
 const selectedContractAddress = "0x66F4f64f9Dce3eB1476af5E1f530228b8eD0a63f"//fuji 10avax
-const sherpaState = state()
+const sherpaState = state
 
 const weiToEther = (x)=>x*1e18
 
