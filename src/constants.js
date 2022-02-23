@@ -293,12 +293,9 @@ export const getters = {
       );
     })[0];
   },
-  getSherpaProxyContract: state => {
-    return state.sherpaProxyContract.fuji
-
-    //todo fix  -- env should be used instead of nuxt?
-    // return ($nuxt.$config.chainId == 43114)
-    //   ? state.sherpaProxyContract.mainnet : state.sherpaProxyContract.fuji
+  getSherpaProxyContract: state => (chainId) => {
+    return (chainId == 43114)
+      ? state.sherpaProxyContract.mainnet : state.sherpaProxyContract.fuji
   },
   getSelectedRelayer: state => {
     return state.relayersList[0]
