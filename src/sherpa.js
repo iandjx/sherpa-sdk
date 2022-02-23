@@ -2,7 +2,7 @@ import {
   toHex,
   getNoteStringAndCommitment,
   parseNote,
-  generateProofSherpa
+  generateProofSherpa,
 } from "./snark-functions";
 import networkConfig from "./networkConfig";
 const assert = require("assert");
@@ -16,7 +16,7 @@ export const state = () => {
         label: "AVAX",
         address: null,
         decimals: 18,
-        chainId: 43114
+        chainId: 43114,
       },
       {
         id: 2,
@@ -24,7 +24,7 @@ export const state = () => {
         label: "AVAX",
         address: null,
         decimals: 18,
-        chainId: 43113
+        chainId: 43113,
       },
       {
         id: 3,
@@ -32,7 +32,7 @@ export const state = () => {
         label: "TSD",
         address: "0x4fbf0429599460D327BD5F55625E30E4fC066095",
         decimals: 18,
-        chainId: 43114
+        chainId: 43114,
       },
       {
         id: 4,
@@ -40,7 +40,7 @@ export const state = () => {
         label: "TSD",
         address: "0xc92bd11e6ecc0a4faf9c8bb5395ebb617d7e6698",
         decimals: 18,
-        chainId: 43113
+        chainId: 43113,
       },
       {
         id: 5,
@@ -48,7 +48,7 @@ export const state = () => {
         label: "ELK",
         address: "0xE1C110E1B1b4A1deD0cAf3E42BfBdbB7b5d7cE1C",
         decimals: 18,
-        chainId: 43114
+        chainId: 43114,
       },
     ],
     contracts: [
@@ -59,7 +59,7 @@ export const state = () => {
         token: "avax",
         allowance: Number.MAX_SAFE_INTEGER,
         value: 10000000000000000000,
-        chainId: 43113
+        chainId: 43113,
       },
       {
         label: "100",
@@ -68,7 +68,7 @@ export const state = () => {
         token: "avax",
         allowance: Number.MAX_SAFE_INTEGER,
         value: 100000000000000000000,
-        chainId: 43113
+        chainId: 43113,
       },
       {
         label: "500",
@@ -77,7 +77,7 @@ export const state = () => {
         token: "avax",
         allowance: Number.MAX_SAFE_INTEGER,
         value: 500000000000000000000,
-        chainId: 43113
+        chainId: 43113,
       },
       {
         label: "10",
@@ -86,7 +86,7 @@ export const state = () => {
         token: "avax",
         allowance: Number.MAX_SAFE_INTEGER,
         value: 10000000000000000000,
-        chainId: 43114
+        chainId: 43114,
       },
       {
         label: "100",
@@ -95,7 +95,7 @@ export const state = () => {
         token: "avax",
         allowance: Number.MAX_SAFE_INTEGER,
         value: 100000000000000000000,
-        chainId: 43114
+        chainId: 43114,
       },
       {
         label: "500",
@@ -104,7 +104,7 @@ export const state = () => {
         token: "avax",
         allowance: Number.MAX_SAFE_INTEGER,
         value: 500000000000000000000,
-        chainId: 43114
+        chainId: 43114,
       },
       {
         label: "100",
@@ -113,7 +113,7 @@ export const state = () => {
         token: "tsd",
         allowance: null,
         value: 100000000000000000000,
-        chainId: 43113
+        chainId: 43113,
       },
       {
         label: "1000",
@@ -122,7 +122,7 @@ export const state = () => {
         token: "tsd",
         allowance: null,
         value: 1000000000000000000000,
-        chainId: 43113
+        chainId: 43113,
       },
       {
         label: "10000",
@@ -131,7 +131,7 @@ export const state = () => {
         token: "tsd",
         allowance: null,
         value: 10000000000000000000000,
-        chainId: 43113
+        chainId: 43113,
       },
       {
         label: "100",
@@ -140,7 +140,7 @@ export const state = () => {
         token: "tsd",
         allowance: null,
         value: 100000000000000000000,
-        chainId: 43114
+        chainId: 43114,
       },
       {
         label: "1000",
@@ -149,7 +149,7 @@ export const state = () => {
         token: "tsd",
         allowance: null,
         value: 1000000000000000000000,
-        chainId: 43114
+        chainId: 43114,
       },
       {
         label: "10000",
@@ -158,7 +158,7 @@ export const state = () => {
         token: "tsd",
         allowance: null,
         value: 10000000000000000000000,
-        chainId: 43114
+        chainId: 43114,
       },
       {
         label: "25",
@@ -167,7 +167,7 @@ export const state = () => {
         token: "elk",
         allowance: null,
         value: 25000000000000000000,
-        chainId: 43114
+        chainId: 43114,
       },
       {
         label: "250",
@@ -176,7 +176,7 @@ export const state = () => {
         token: "elk",
         allowance: null,
         value: 250000000000000000000,
-        chainId: 43114
+        chainId: 43114,
       },
       {
         label: "500",
@@ -185,7 +185,7 @@ export const state = () => {
         token: "elk",
         allowance: null,
         value: 500000000000000000000,
-        chainId: 43114
+        chainId: 43114,
       },
     ],
     selectedContract: "0x66F4f64f9Dce3eB1476af5E1f530228b8eD0a63f",
@@ -200,89 +200,88 @@ export const state = () => {
     withdrawNoteToken: null,
     withdrawAddress: null,
     complianceInfo: null,
-    sherpaProxyContract:
-      {
-        fuji: "0xC0EB087ac8C732AC23c52A16627c4539d8966d79",
-        mainnet: "0x171Fb28ebfFcb2737E530E1Fd48CB4Ef12E5031e"
-      },
+    sherpaProxyContract: {
+      fuji: "0xC0EB087ac8C732AC23c52A16627c4539d8966d79",
+      mainnet: "0x171Fb28ebfFcb2737E530E1Fd48CB4Ef12E5031e",
+    },
     relayerMode: true,
     relayersList: [
       {
         id: 1,
         url: "https://relayer.sherpa.entropygra.ph",
-        name: 'Sherpa Relayer',
+        name: "Sherpa Relayer",
         chainId: 43114,
         fee: 1,
-        status: {}
+        status: {},
       },
       {
         id: 2,
         url: "https://relayer-fuji.sherpa.entropygra.ph",
-        name: 'Sherpa Fuji Relayer',
+        name: "Sherpa Fuji Relayer",
         chainId: 43113,
         fee: 1,
-        status: {}
+        status: {},
       },
       {
         id: 3,
         url: "http://localhost:8000",
-        name: 'Local Test Relayer',
+        name: "Local Test Relayer",
         chainId: 43114,
-        fee: 0.10,
-        status: {}
+        fee: 0.1,
+        status: {},
       },
       {
         id: 4,
         url: "http://localhost:8000",
-        name: 'Local Test Relayer',
+        name: "Local Test Relayer",
         chainId: 43113,
-        fee: 0.10,
-        status: {}
-      }
+        fee: 0.1,
+        status: {},
+      },
     ],
-    selectedRelayerId: 1
+    selectedRelayerId: 1,
   };
 };
 
 export const getters = {
-  getTokens: state => {
+  getTokens: (state) => {
     return state.tokens;
   },
-  getContracts: state => {
+  getContracts: (state) => {
     return state.tokens;
   },
-  getSelectedToken: state => {
+  getSelectedToken: (state) => {
     return state.selectedToken;
   },
-  getSelectedContract: state => {
+  getSelectedContract: (state) => {
     return state.selectedContract;
   },
-  getSelectedAmount: state => {
-    let noteAmount = state.contracts.filter(contract => {
+  getSelectedAmount: (state) => {
+    let noteAmount = state.contracts.filter((contract) => {
       return contract.contractAddress == state.selectedContract;
     })[0].label;
     return noteAmount;
   },
-  getSelectedValue: state => {
-    let value = state.contracts.filter(contract => {
+  getSelectedValue: (state) => {
+    let value = state.contracts.filter((contract) => {
       return contract.contractAddress == state.selectedContract;
     })[0].value;
     return value;
   },
-  getWithdrawNote: state => {
+  getWithdrawNote: (state) => {
     return state.withdrawNote;
   },
-  getWithdrawNoteToken: state => {
+  getWithdrawNoteToken: (state) => {
     return state.withdrawNoteToken;
   },
   getNoteString(state) {
     return state.currentNote;
   },
-  getWithdrawAddress: state => {
+  getWithdrawAddress: (state) => {
     return state.withdrawAddress;
   },
-  getNoteContractInfo: state => parsedNote => {
-    return state.contracts.filter(contract => {
+  getNoteContractInfo: (state) => (parsedNote) => {
+    return state.contracts.filter((contract) => {
       return (
         contract.value == parsedNote.amount && //todo changed from  contract.label === parsedNote.amount &&
         contract.token === parsedNote.currency &&
@@ -290,25 +289,27 @@ export const getters = {
       );
     })[0];
   },
-  getSelectedContractInfo: state => {
-    return state.contracts.filter(contract => {
+  getSelectedContractInfo: (state) => {
+    return state.contracts.filter((contract) => {
       return state.selectedContract === contract.contractAddress;
     })[0];
   },
-  getSherpaProxyContract: state => {
-    return state.sherpaProxyContract.fuji
+  getSherpaProxyContract: (state) => {
+    return state.sherpaProxyContract.fuji;
 
     //todo fix  -- env should be used instead of nuxt?
     // return ($nuxt.$config.chainId == 43114)
     //   ? state.sherpaProxyContract.mainnet : state.sherpaProxyContract.fuji
   },
-  getSelectedRelayer: state => {
-    return state.relayersList[0]
+  getSelectedRelayer: (state) => {
+    return state.relayersList[0];
     //todo fix
     // return state.relayersList.find(relayer => relayer.id === state.selectedRelayerId);
   },
-  getRelayersList: state => {
-    return state.relayersList.filter(relayer => relayer.chainId === $nuxt.$config.chainId);
+  getRelayersList: (state) => {
+    return state.relayersList.filter(
+      (relayer) => relayer.chainId === $nuxt.$config.chainId
+    );
   },
 };
 
@@ -331,7 +332,7 @@ export const mutations = {
   setWithdrawNote(state, noteString) {
     state.withdrawNote = noteString;
     state.withdrawNoteToken = parseNote(noteString).currency;
-    if (state.withdrawNoteToken != 'avax') {
+    if (state.withdrawNoteToken != "avax") {
       state.relayerMode = false;
     }
   },
@@ -342,12 +343,14 @@ export const mutations = {
     state.complianceInfo = complianceInfo;
   },
   setAllowance(state, { contractAddress, allowance }) {
-    state.contracts.find(contract => contract.contractAddress === contractAddress).allowance = allowance;
+    state.contracts.find(
+      (contract) => contract.contractAddress === contractAddress
+    ).allowance = allowance;
   },
-  setRelayerMode(state, value){
-    console.log("relayer is set to ", value)
-    state.relayerMode = value
-  }
+  setRelayerMode(state, value) {
+    console.log("relayer is set to ", value);
+    state.relayerMode = value;
+  },
 };
 
 export async function createDeposit(amount, token, chainId) {
@@ -358,13 +361,13 @@ export async function createDeposit(amount, token, chainId) {
   );
   return {
     noteString,
-    commitment
-  }
+    commitment,
+  };
 }
 
-export async function downloadNote(noteString, saveAs){
+export async function downloadNote(noteString, saveAs) {
   let blob = new Blob(noteString, {
-    type: "text/plain;charset=utf-8"
+    type: "text/plain;charset=utf-8",
   });
   const currentDate = new Date();
   const timestamp = currentDate.getTime();
@@ -376,86 +379,105 @@ export async function downloadNote(noteString, saveAs){
 }
 
 //todo move
-const sherpaProxyABI = [{
-  "type":"function",
-  "name":"deposit",
-  "inputs": [
-    {"name":"_sherpa","type":"address"},
-    {"name":"_commitment","type":"bytes32"},
-    {"name":"_encryptedNote","type":"bytes"}
-    ],
-  "outputs": []
-},
+const sherpaProxyABI = [
   {
-    "type":"function",
-    "name":"withdraw",
-    "inputs": [
-      {"name":"_sherpa","type":"address"},
-      {"name":"_proof","type":"bytes"},
-      {"name":"_root","type":"bytes32"},
-      {"name":"_nullifierHash","type":"bytes32"},
-      {"name":"_recipient","type":"address"},
-      {"name":"_relayer","type":"address"},
-      {"name":"_fee","type":"uint256"},
-      {"name":"_refund","type":"uint256"},
+    type: "function",
+    name: "deposit",
+    inputs: [
+      { name: "_sherpa", type: "address" },
+      { name: "_commitment", type: "bytes32" },
+      { name: "_encryptedNote", type: "bytes" },
     ],
-    "outputs": []
-  }
-]
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "withdraw",
+    inputs: [
+      { name: "_sherpa", type: "address" },
+      { name: "_proof", type: "bytes" },
+      { name: "_root", type: "bytes32" },
+      { name: "_nullifierHash", type: "bytes32" },
+      { name: "_recipient", type: "address" },
+      { name: "_relayer", type: "address" },
+      { name: "_fee", type: "uint256" },
+      { name: "_refund", type: "uint256" },
+    ],
+    outputs: [],
+  },
+];
 
-
-export async function sendDeposit(web3, value, sherpaProxyContractAddress, chainId, selectedContractAddress, commitment, selectedToken, fromAddress) {
-
+export async function sendDeposit(
+  web3,
+  value,
+  sherpaProxyContractAddress,
+  chainId,
+  selectedContractAddress,
+  commitment,
+  selectedToken,
+  fromAddress
+) {
   let pitContract = new web3.eth.Contract(
     sherpaProxyABI,
     sherpaProxyContractAddress
   );
-  await pitContract.methods.deposit(
-    selectedContractAddress,
-    toHex(commitment),
-    0)
+  await pitContract.methods
+    .deposit(selectedContractAddress, toHex(commitment), 0)
     .send({
       value: selectedToken === "avax" ? value : 0,
       from: fromAddress,
-      gas: 2100000
+      gas: 2100000,
     });
 }
 
 //todo move
-const ethSherpaABI = [{
-  "type":"function",
-  "name":"isSpent",
-  "inputs": [{"name":"_nullifierHash","type":"bytes32"}],
-  "outputs": [{
-    "internalType": "bool",
-    "name": "",
-    "type": "bool"
-  }]
-},
+const ethSherpaABI = [
   {
-    "type":"function",
-    "name":"isKnownRoot",
-    "inputs": [{"name":"_root","type":"bytes32"}],
-    "outputs": [{
-      "internalType": "bool",
-      "name": "",
-      "type": "bool"
-    }]
-  }
+    type: "function",
+    name: "isSpent",
+    inputs: [{ name: "_nullifierHash", type: "bytes32" }],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+  },
+  {
+    type: "function",
+    name: "isKnownRoot",
+    inputs: [{ name: "_root", type: "bytes32" }],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+  },
+];
 
-]
-
-export async function withdraw(withdrawNote, withdrawAddress, relayerMode, chainId, web3, events, circuit, provingKey) {
+export async function withdraw(
+  withdrawNote,
+  withdrawAddress,
+  relayerMode,
+  chainId,
+  web3,
+  events,
+  circuit,
+  provingKey
+) {
   // let web3;
   const parsedNote = parseNote(withdrawNote);
-  const addressRegex = /^0x[a-fA-F0-9]{40}/g
-  const match = addressRegex.exec(withdrawAddress)
+  const addressRegex = /^0x[a-fA-F0-9]{40}/g;
+  const match = addressRegex.exec(withdrawAddress);
 
   if (!match) {
-    throw new Error("The address has invalid format")
+    throw new Error("The address has invalid format");
   }
 
-  if(relayerMode) {
+  if (relayerMode) {
     const id = chainId;
     const network = { ...networkConfig[`chainId${id}`], id: Number(id) };
     // web3 = new Web3(network.rpcUrls.Figment.url);//todo Figment? - maybe move this logic to calling function?
@@ -472,42 +494,54 @@ export async function withdraw(withdrawNote, withdrawAddress, relayerMode, chain
     sherpaProxyContractAddress
   );
 
-
   const sherpaContract = new web3.eth.Contract(
     ethSherpaABI,
     contractInfo.contractAddress
   );
 
   const relayer = getters.getSelectedRelayer(state());
-  const relayerFee = BigInt(0)//todo BigInt(relayer.status.tornadoServiceFee*10000).mul(BigInt(contractInfo.value)).div(BigInt(1000000))
-  const gas = BigInt(225*350000)
-  let totalFee = relayerFee.add(gas)
-  let rewardAccount = relayer.status.rewardAccount//todo currently undefined - but we are not using a relayer for now
-  let refundAmount = 0 //parsedNote.amount * (10**18)
-  if(relayerMode){
-    totalFee = 0
-    rewardAccount = 0
-    refundAmount = 0
+  const relayerFee = BigInt(0); //todo BigInt(relayer.status.tornadoServiceFee*10000).mul(BigInt(contractInfo.value)).div(BigInt(1000000))
+  const gas = BigInt(225 * 350000);
+  let totalFee = relayerFee.add(gas);
+  let rewardAccount = relayer.status.rewardAccount; //todo currently undefined - but we are not using a relayer for now
+  let refundAmount = 0; //parsedNote.amount * (10**18)
+  if (relayerMode) {
+    totalFee = 0;
+    rewardAccount = 0;
+    refundAmount = 0;
   }
   // assert(parsedNote.netId === relayer.chainId || parsedNote.netId === '*', 'This relayer is for a different network')
-  const { proof, args } = await generateProofSherpa(sherpaContract, parsedNote.deposit, withdrawAddress, events.depositEvents, circuit, provingKey, rewardAccount, totalFee, refundAmount)
+  const { proof, args } = await generateProofSherpa(
+    sherpaContract,
+    parsedNote.deposit,
+    withdrawAddress,
+    events.depositEvents,
+    circuit,
+    provingKey,
+    rewardAccount,
+    totalFee,
+    refundAmount
+  );
   const requestBody = {
     proof: proof,
     contract: contractInfo.contractAddress,
-    args: [args[0], args[1], args[2], args[3], args[4], args[5]]
+    args: [args[0], args[1], args[2], args[3], args[4], args[5]],
+  };
+
+  if (!relayerMode) {
+    await pitContract.methods
+      .withdraw(contractInfo.contractAddress, proof, ...args)
+      .send({
+        from: withdrawAddress,
+        gas: 1000000,
+      });
   }
 
-  if(!relayerMode){
-    await pitContract.methods.withdraw(contractInfo.contractAddress, proof, ...args).send({
-      from: withdrawAddress,
-      gas: 1000000
-    });
-  }
-
-
-  if(relayerMode){
+  if (relayerMode) {
     const response = await this.$axios.$post(
-      relayer.url +'/v1/tornadoWithdraw', requestBody
+      relayer.url + "/v1/tornadoWithdraw",
+      requestBody
     );
   }
 }
+export { default as events } from "./events";
