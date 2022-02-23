@@ -6,6 +6,7 @@ import {
 } from "./snark-functions";
 import networkConfig from "./networkConfig";
 import {state, getters, sherpaProxyABI, ethSherpaABI} from "./constants"
+import {actions, sortEventsByLeafIndex} from "./events";
 
 export class SherpaSDK {
   constructor(chainId, web3) {
@@ -15,13 +16,21 @@ export class SherpaSDK {
 
   //todo
   async fetchAndSaveCircuitAndProvingKey(){
-    this.circuit=""
-    this.provingKey=""
+    //todo promise.all
+    const circuit = await (await fetch('https://app.sherpa.cash/withdraw.json')).json()
+    const provingKey = await (await fetch('https://app.sherpa.cash/withdraw_proving_key.bin')).arrayBuffer()
+    this.circuit=circuit
+    this.provingKey=provingKey
   }
 
-  fetchAndSaveAndReturnEvents(){
-
-    this.events=""
+  async fetchAndSaveAndReturnEvents(valueWei,selectedToken){
+    const selectedContractAddress = getters.getNoteContractInfo({
+      amount:Number(valueWei),
+      currency:selectedToken,
+      netId:this.chainId
+    }).contractAddress
+    const events = await actions.getEventsSubgraph(state, selectedContractAddress, this.chainId)
+    this.events=events
     return events
   }
 
@@ -56,7 +65,7 @@ export class SherpaSDK {
   async sendDeposit(valueWei, commitment, selectedToken, fromAddress) {
     const sherpaProxyAddress = getters.getSherpaProxyContract(this.netId)
     const selectedContractAddress = getters.getNoteContractInfo({
-      amount:valueWei,
+      amount:Number(valueWei),
       currency:selectedToken,
       netId:this.chainId
     }).contractAddress
@@ -74,8 +83,10 @@ export class SherpaSDK {
         gas: 2100000
       });
   }
-  //todo add builder to get events and circuit/proving key
-  async withdraw(withdrawNote, withdrawAddress, relayerMode, events, circuit, provingKey) {
+  async withdraw(withdrawNote, withdrawAddress, relayerMode, selectedRelayer) {
+    if (!this.events || ! this.circuit || !this.provingKey){
+      throw new Error("Sherpa SDK not initialized with events or circuir/proving key")
+    }
     // let web3;
     const parsedNote = parseNote(withdrawNote);
     const addressRegex = /^0x[a-fA-F0-9]{40}/g
@@ -107,19 +118,21 @@ export class SherpaSDK {
       contractInfo.contractAddress
     );
 
-    const relayer = getters.getSelectedRelayer(state);
+    const relayer = selectedRelayer//todo getters.getSelectedRelayer(state);
     const relayerFee = BigInt(0)//todo BigInt(relayer.status.tornadoServiceFee*10000).mul(BigInt(contractInfo.value)).div(BigInt(1000000))
     const gas = BigInt(225*350000)
     let totalFee = relayerFee.add(gas)
-    let rewardAccount = relayer.status.rewardAccount//todo currently undefined - but we are not using a relayer for now
+    let rewardAccount = 0//todo relayer.status.rewardAccount//todo currently undefined - but we are not using a relayer for now
     let refundAmount = 0 //parsedNote.amount * (10**18)
     if(relayerMode){
       totalFee = 0
       rewardAccount = 0
       refundAmount = 0
     }
+    const depositEvents = this.events.events.filter(e => e.type === 'Deposit').sort(sortEventsByLeafIndex);
+    // console.log("xxx",{sherpaContract, deposit:parsedNote.deposit, withdrawAddress, depositEvents, circuit:this.circuit, provingKey:this.provingKey, rewardAccount, totalFee, refundAmount})
     // assert(parsedNote.netId === relayer.chainId || parsedNote.netId === '*', 'This relayer is for a different network')
-    const { proof, args } = await generateProofSherpa(sherpaContract, parsedNote.deposit, withdrawAddress, events.depositEvents, circuit, provingKey, rewardAccount, totalFee, refundAmount)
+    const { proof, args } = await generateProofSherpa(sherpaContract, parsedNote.deposit, withdrawAddress, depositEvents, this.circuit, this.provingKey, rewardAccount, totalFee, refundAmount)
     const requestBody = {
       proof: proof,
       contract: contractInfo.contractAddress,
@@ -135,7 +148,7 @@ export class SherpaSDK {
 
 
     if(relayerMode){
-      const response = await this.$axios.$post(
+      const response = await this.$axios.$post(//todo fix
         relayer.url +'/v1/tornadoWithdraw', requestBody
       );
     }
