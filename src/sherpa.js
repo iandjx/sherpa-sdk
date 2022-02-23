@@ -5,6 +5,7 @@ import {
   generateProofSherpa,
 } from "./snark-functions";
 import networkConfig from "./networkConfig";
+import { actions } from "./events";
 const assert = require("assert");
 
 export const state = () => {
@@ -311,6 +312,14 @@ export const getters = {
       (relayer) => relayer.chainId === $nuxt.$config.chainId
     );
   },
+  getEvents: async () => {
+    const events = await actions.getEventsSubgraph(
+      sherpaState,
+      selectedContractAddress,
+      netId
+    );
+    return events;
+  },
 };
 
 export const mutations = {
@@ -544,4 +553,3 @@ export async function withdraw(
     );
   }
 }
-export { default as events } from "./events";
