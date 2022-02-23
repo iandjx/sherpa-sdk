@@ -312,7 +312,7 @@ export const getters = {
       (relayer) => relayer.chainId === $nuxt.$config.chainId
     );
   },
-  getEvents: async () => {
+  getEvents: async (sherpaState, selectedContractAddress, netId) => {
     const events = await actions.getEventsSubgraph(
       sherpaState,
       selectedContractAddress,
