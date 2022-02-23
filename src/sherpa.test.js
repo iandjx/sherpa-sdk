@@ -66,9 +66,9 @@ describe("sherpa", () => {
       /** Initialize SDK **/
       const [_, selectedToken, valueWei] = uniqueKey.split("-")
       const sherpaSDK = new SherpaSDK(netId, web3)
-      await sherpaSDK.fetchAndSaveCircuitAndProvingKey()//must be done but can be done eagerly
-      await sherpaSDK.fetchAndSaveAndReturnEvents(valueWei, selectedToken)//should be done at last moment as the data will be most live that way
-      await sherpaSDK.withdraw(uniqueKey, destinationAddress, selfRelay, {})
+      await sherpaSDK.fetchCircuitAndProvingKey()//must be done but can be done eagerly
+      await sherpaSDK.fetchEvents(valueWei, selectedToken)//should be done at last moment as the data will be most live that way
+      await sherpaSDK.withdraw(uniqueKey, destinationAddress, selfRelay, {})//todo
     })
   })
 

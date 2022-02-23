@@ -15,7 +15,7 @@ export class SherpaSDK {
   }
 
   //todo
-  async fetchAndSaveCircuitAndProvingKey(){
+  async fetchCircuitAndProvingKey(){
     //todo promise.all
     const circuit = await (await fetch('https://app.sherpa.cash/withdraw.json')).json()
     const provingKey = await (await fetch('https://app.sherpa.cash/withdraw_proving_key.bin')).arrayBuffer()
@@ -23,7 +23,7 @@ export class SherpaSDK {
     this.provingKey=provingKey
   }
 
-  async fetchAndSaveAndReturnEvents(valueWei,selectedToken){
+  async fetchEvents(valueWei, selectedToken){
     const selectedContractAddress = getters.getNoteContractInfo({
       amount:Number(valueWei),
       currency:selectedToken,
@@ -148,9 +148,9 @@ export class SherpaSDK {
 
 
     if(relayerMode){
-      const response = await this.$axios.$post(//todo fix
-        relayer.url +'/v1/tornadoWithdraw', requestBody
-      );
+      // const response = await this.$axios.$post(//todo fix
+      //   relayer.url +'/v1/tornadoWithdraw', requestBody
+      // );
     }
   }
 

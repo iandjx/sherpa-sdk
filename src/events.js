@@ -1,7 +1,7 @@
 import { toHex } from "./snark-functions";
 import Web3 from "web3";
 import networkConfig from './networkConfig'
-import { createClient } from '@urql/core';
+import { request, gql } from "graphql-request";
 
 export const state = () => {
   return {
@@ -114,7 +114,7 @@ export const actions = {
         timestamp: e.timestamp,
         dateTime: new Date(parseInt(e.timestamp) * 1000)
       }));
-    
+
     events.push(...standardDepositEvents);
     events.push(...standardWithdrawalEvents);
     const db = dep[0] ? parseInt(dep[0].blockNumber) : 0;
@@ -138,8 +138,7 @@ async function subgraphDepositQuery(first, offset, amnt, curr, chainId) {
   // const id = $nuxt.$config.chainId;
   const network = { ...networkConfig[`chainId${chainId}`], id: Number(chainId) };
   const APIURL = network.subgraph;
-  const client = createClient({ url: APIURL, fetch });
-  const depQuery = `
+  const depQuery = gql`
     query subgraphDeposits($first: Int, $offset: Int, $curr: String, $amnt: String){
       deposits(first: $first, skip: $offset, orderBy: index, orderDirection: desc, where: { currency: $curr, amount: $amnt }){
         id
@@ -153,16 +152,27 @@ async function subgraphDepositQuery(first, offset, amnt, curr, chainId) {
       }
     }
     `
-  const dep = (await client.query(depQuery, {first: first, offset: offset, curr: curr, amnt: amnt }).toPromise()).data.deposits;
-  return dep;
+  const variables = {
+    first,
+    offset,
+    curr,
+    amnt,
+  };
+
+
+  const response = await request(APIURL, depQuery, variables).catch((err) =>
+    console.log(err)
+  );
+  console.log(response)
+  return response.deposits;
+
 }
 
 async function subgraphWithdrawalQuery(first, offset, amnt, curr, chainId) {
   // const id = $nuxt.$config.chainId;
   const network = { ...networkConfig[`chainId${chainId}`], id: Number(chainId) };
   const APIURL = network.subgraph;
-  const client = createClient({ url: APIURL, fetch });
-  const witQuery = `
+  const witQuery = gql`
     query subgraphWithdrawals($first: Int, $offset: Int, $curr: String, $amnt: String){
       withdrawals(first: $first, skip: $offset, orderBy: index, orderDirection: desc, where: { currency: $curr, amount: $amnt }){
         id
@@ -178,8 +188,16 @@ async function subgraphWithdrawalQuery(first, offset, amnt, curr, chainId) {
       }
     }
     `
-  const wit = (await client.query(witQuery, {first: first, offset: offset, curr: curr, amnt: amnt }).toPromise()).data.withdrawals;
-  return wit;
+  const variables = {
+    first,
+    offset,
+    curr,
+    amnt,
+  };
+  const response = await request(APIURL, witQuery, variables).catch((err) =>
+    console.log(err)
+  );
+  return response.withdrawals;
 }
 
 function decodeThisEvent(event){
