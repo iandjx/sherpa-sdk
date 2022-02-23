@@ -12,6 +12,19 @@ export class SherpaSDK {
     this.chainId = chainId;
     this.web3 = web3
   }
+
+  //todo
+  async fetchAndSaveCircuitAndProvingKey(){
+    this.circuit=""
+    this.provingKey=""
+  }
+
+  fetchAndSaveAndReturnEvents(){
+
+    this.events=""
+    return events
+  }
+
   createDeposit(amount, token) {
     const { noteString, commitment } = getNoteStringAndCommitment(
       token,
@@ -22,6 +35,9 @@ export class SherpaSDK {
       noteString,
       commitment
     }
+  }
+  getRelayerList(){
+    getters.getRelayersList(this.chainId)
   }
   async downloadNote(noteString, saveAs){
     let blob = new Blob(noteString, {
@@ -38,8 +54,8 @@ export class SherpaSDK {
     );
   }
   async sendDeposit(valueWei, commitment, selectedToken, fromAddress) {
-    const sherpaProxyAddress = getters.getSherpaProxyContract(state)(this.netId)//todo remove currying
-    const selectedContractAddress = getters.getNoteContractInfo(state)({
+    const sherpaProxyAddress = getters.getSherpaProxyContract(this.netId)
+    const selectedContractAddress = getters.getNoteContractInfo({
       amount:valueWei,
       currency:selectedToken,
       netId:this.chainId
@@ -79,8 +95,8 @@ export class SherpaSDK {
     }
     // console.log("parsedNote", parsedNote);
     // console.log("hex commitment", toHex(parsedNote.deposit.commitment));
-    const contractInfo = getters.getNoteContractInfo(state)(parsedNote);//todo remove currying
-    let sherpaProxyContractAddress = getters.getSherpaProxyContract(state);
+    const contractInfo = getters.getNoteContractInfo(parsedNote);
+    let sherpaProxyContractAddress = getters.getSherpaProxyContract(this.chainId);
     const pitContract = new this.web3.eth.Contract(
       sherpaProxyABI,
       sherpaProxyContractAddress

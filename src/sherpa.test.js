@@ -14,19 +14,20 @@ const amount = 10
 const currency = "avax"
 
 /** test helpers **/
-const testPrivKey = process.env.TEST_PRIVATE_KEY
-const providerUrl = process.env.PROVIDER_URL
+const testPrivKey = String(process.env.TEST_PRIVATE_KEY)
+const providerUrl = String(process.env.PROVIDER_URL)
 jest.spyOn(global, "Blob").mockImplementationOnce(() => ({ type: "text/plain;charset=utf-8" }));
 const etherToWei = (x)=>x*1e18
 
 /** web3 **/
 const web3 = new Web3(new Web3.providers.HttpProvider(providerUrl))
 const fromAddress = web3.eth.accounts.privateKeyToAccount(testPrivKey).address
+console.log("from address is",fromAddress)
 web3.eth.accounts.wallet.add(testPrivKey)
 
 /** test setup **/
 // const sherpaProxyAddress = getters.getSherpaProxyContract(state)(netId)//todo remove curry
-const selectedContractAddress = getters.getNoteContractInfo(state)({
+const selectedContractAddress = getters.getNoteContractInfo({
   amount:etherToWei(amount),
   currency,
   netId
@@ -35,7 +36,7 @@ const selectedContractAddress = getters.getNoteContractInfo(state)({
 describe("sherpa", () => {
   describe("deposit",()=>{
     it("should return notestring and commitment", async () => {
-      const sherpaSDK = new SherpaSDK(netId)
+      const sherpaSDK = new SherpaSDK(netId, web3)
       const deposit = sherpaSDK.createDeposit(10,"avax")
       const notePieces = deposit.noteString.split("-")
       expect(notePieces[0]).toEqual("sherpa")
@@ -47,7 +48,7 @@ describe("sherpa", () => {
       console.log(deposit)
     });
     it("create and download",()=>{
-      const sherpaSDK = new SherpaSDK(netId)
+      const sherpaSDK = new SherpaSDK(netId, web3)
       const deposit = sherpaSDK.createDeposit(10,"avax")
       const mockSaveAs = jest.fn()
       sherpaSDK.downloadNote(deposit.noteString, mockSaveAs)
@@ -55,11 +56,12 @@ describe("sherpa", () => {
       expect(filename.startsWith("backup-sherpa-avax-10-")).toBeTruthy()
     })
     it("should create, download and send",async ()=>{
-      const sherpaSDK = new SherpaSDK(netId)
-      const deposit = sherpaSDK.createDeposit(etherToWei(10),"avax")
-      await sherpaSDK.downloadNote(deposit.noteString, jest.fn())
-      const commitment = deposit.commitment
-      await sherpaSDK.sendDeposit(etherToWei(10), commitment,"avax",fromAddress)
+      const sherpaSDK = new SherpaSDK(netId, web3)
+      sherpaSDK.fetchAndSaveCircuitAndProvingKey()
+      const deposit = sherpaSDK.createDeposit(etherToWei(10),"avax")//create the unique key that will be used to withdraw
+      console.log("deposit is",deposit)
+      await sherpaSDK.downloadNote(deposit.noteString, jest.fn())//ensure the user has downloaded the unique key to a safe spot
+      await sherpaSDK.sendDeposit(etherToWei(10), deposit.commitment,"avax",fromAddress)//send funds to the smart contract
     })
   })
   describe("withdraw",()=>{

@@ -284,7 +284,7 @@ export const state = {
 };
 
 export const getters = {
-  getNoteContractInfo: state => parsedNote => {
+  getNoteContractInfo: parsedNote => {
     return state.contracts.filter(contract => {
       return (
         contract.value == parsedNote.amount && //todo changed from  contract.label === parsedNote.amount &&
@@ -293,16 +293,17 @@ export const getters = {
       );
     })[0];
   },
-  getSherpaProxyContract: state => (chainId) => {
+  getSherpaProxyContract: (chainId) => {
     return (chainId == 43114)
       ? state.sherpaProxyContract.mainnet : state.sherpaProxyContract.fuji
   },
-  getSelectedRelayer: state => {
-    return state.relayersList[0]
-    //todo fix
-    // return state.relayersList.find(relayer => relayer.id === state.selectedRelayerId);
-  },
-  getRelayersList: state => {
-    return state.relayersList.filter(relayer => relayer.chainId === $nuxt.$config.chainId);
+  // //todo fix
+  // getSelectedRelayer: state => {
+  //   return state.relayersList[0]
+  //   //todo fix
+  //   // return state.relayersList.find(relayer => relayer.id === state.selectedRelayerId);
+  // },
+  getRelayersList: (chainId) => {
+    return state.relayersList.filter(relayer => relayer.chainId === chainId);
   },
 };
