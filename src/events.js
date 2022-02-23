@@ -178,7 +178,14 @@ async function subgraphDepositQuery(first, offset, amnt, curr, chainId) {
     }
   `;
 
-  const response = await request(APIURL, depQuery).catch((err) =>
+  const variables = {
+    first,
+    offset,
+    curr,
+    amnt,
+  };
+
+  const response = await request(APIURL, depQuery, variables).catch((err) =>
     console.log(err)
   );
   // const dep = (
@@ -186,7 +193,7 @@ async function subgraphDepositQuery(first, offset, amnt, curr, chainId) {
   //     .query(depQuery, { first: first, offset: offset, curr: curr, amnt: amnt })
   //     .toPromise()
   // ).data.deposits;
-  return response.data.deposits;
+  return response.deposits;
 }
 
 async function subgraphWithdrawalQuery(first, offset, amnt, curr, chainId) {
@@ -224,7 +231,13 @@ async function subgraphWithdrawalQuery(first, offset, amnt, curr, chainId) {
       }
     }
   `;
-  const response = await request(APIURL, witQuery).catch((err) =>
+  const variables = {
+    first,
+    offset,
+    curr,
+    amnt,
+  };
+  const response = await request(APIURL, witQuery, variables).catch((err) =>
     console.log(err)
   );
   // const wit = (
