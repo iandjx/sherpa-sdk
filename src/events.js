@@ -1,8 +1,7 @@
 import { toHex } from "./snark-functions";
 import Web3 from "web3";
-import networkConfig from './networkConfig'
-import { createClient } from '@urql/core';
-
+import networkConfig from "./networkConfig";
+import { request, gql } from "graphql-request";
 export const state = () => {
   return {
     latestBlockFetched: -1,
