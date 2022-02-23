@@ -499,7 +499,8 @@ export async function withdraw(withdrawNote, withdrawAddress, relayerMode, chain
 
   if(!relayerMode){
     await pitContract.methods.withdraw(contractInfo.contractAddress, proof, ...args).send({
-      from: withdrawAddress
+      from: withdrawAddress,
+      gas: 1000000
     });
   }
 

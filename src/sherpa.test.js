@@ -4,6 +4,7 @@ import {parseNote} from "./snark-functions";
 import {actions, sortEventsByLeafIndex} from "./events";
 require('dotenv').config()
 jest.setTimeout(60000)
+import 'isomorphic-fetch';//inject fetch globally
 
 const testPrivKey = process.env.TEST_PRIVATE_KEY
 const providerUrl = process.env.PROVIDER_URL
@@ -59,6 +60,7 @@ describe("sherpa", () => {
 
 
     it("should withdraw funds",async ()=>{
+      console.log("here")
       /**User supplied info **/
       const uniqueKey = "sherpa-avax-10000000000000000000-43113-0xf0b4ad335f3a0c3b666160a54ffe8d487e2f8fd708987415523ea1fb6d834e507236654f53ab38a634e3fa6b200893b705709c47203df8cc98f4d5e911cd"
       const commitment = "0x11ba1eb85ecbaf7c1c3ad7e6248bbfb7ef5cf8f68678a6d77162cb0e1080fc28"//this is encoded above

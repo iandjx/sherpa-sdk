@@ -1,7 +1,7 @@
 import { toHex } from "./snark-functions";
 import Web3 from "web3";
-import networkConfig from "./networkConfig";
-import { request } from "graphql-request";
+import networkConfig from './networkConfig'
+import { createClient } from '@urql/core';
 
 export const state = () => {
   return {
