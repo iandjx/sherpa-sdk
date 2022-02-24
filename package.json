@@ -13,12 +13,14 @@
     "jest": "^25.5.0",
     "jest-environment-jsdom": "^25.5.0",
     "request": "^2.88.2",
-    "ts-jest": "^25.5.0"
+    "ts-jest": "^25.5.0",
+    "typescript": "^4.5.5"
   },
   "dependencies": {
     "@urql/core": "^2.4.1",
     "circomlib": "git+https://github.com/tornadocash/circomlib.git#3b492f9801573eebcfe1b6c584afe8a3beecf2b4",
     "dotenv": "^16.0.0",
+    "graphql": "^16.3.0",
     "graphql-request": "^4.0.0",
     "isomorphic-fetch": "^3.0.0",
     "snarkjs": "git+https://github.com/tornadocash/snarkjs.git#869181cfaf7526fe8972073d31655493a04326d5",
