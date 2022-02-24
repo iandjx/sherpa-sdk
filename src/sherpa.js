@@ -69,9 +69,13 @@ export class SherpaSDK {
     await this.fetchEvents(valueWei, selectedToken)
     const compliance = {deposit:null, withdrawl:null}
     const depositEvent = this.events.events.find(e=>e.commitment == commitmentHex)
+    if (!depositEvent){
+      throw new Error("Could not find deposit")
+    }
+    const {from} = await this.web3.eth.getTransaction(depositEvent?.txHash)
     compliance.deposit = {
       transaction:depositEvent?.txHash,
-      address:"0x12345",//todo make blockchain call
+      address:from,
       id:commitmentHex
     }
     const withdrawlEvent = this.events.events.find(e=>e.nullifierHash == nullifierHex)
@@ -94,7 +98,7 @@ export class SherpaSDK {
       sherpaProxyABI,
       sherpaProxyAddress
     );
-    await pitContract.methods.deposit(
+    return await pitContract.methods.deposit(
       selectedContractAddress,
       toHex(commitment),
       0)
@@ -160,12 +164,12 @@ export class SherpaSDK {
       args: [args[0], args[1], args[2], args[3], args[4], args[5]]
     }
 
-    // if(!relayerMode){
-    //   await pitContract.methods.withdraw(contractInfo.contractAddress, proof, ...args).send({
-    //     from: withdrawAddress,
-    //     gas: 1000000
-    //   });
-    // }
+    if(!relayerMode){
+      return await pitContract.methods.withdraw(contractInfo.contractAddress, proof, ...args).send({
+        from: withdrawAddress,
+        gas: 1000000
+      });
+    }
 
 
     if(relayerMode){
