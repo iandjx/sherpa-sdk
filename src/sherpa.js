@@ -64,26 +64,21 @@ export class SherpaSDK {
   }
 
   async getCompliance(uniqueKey){
+    const {/**nullifierHash,**/ commitmentHex, nullifierHex} = parseNote(uniqueKey).deposit;
     const [_, selectedToken, valueWei] = uniqueKey.split("-")
-    const commitment = "0x11ba1eb85ecbaf7c1c3ad7e6248bbfb7ef5cf8f68678a6d77162cb0e1080fc28"//todo
     await this.fetchEvents(valueWei, selectedToken)
     const compliance = {deposit:null, withdrawl:null}
-    const depositEvent = this.events.events.find(e=>e.commitment == commitment)[0]
+    const depositEvent = this.events.events.find(e=>e.commitment == commitmentHex)
     compliance.deposit = {
-      transaction:depositEvent.txHash,
+      transaction:depositEvent?.txHash,
       address:"0x12345",//todo make blockchain call
-      id:commitment
+      id:commitmentHex
     }
-    const nullifyerHash = ""//todo get nullifyer hash from commitment?
-    const withdrawlEvent = {
-      to: '0xa8b3ddaf21bc566fc0623bde1060864f934829e3',
-      nullifierHash:
-        '0x0ae4a297ad7bc65a5bbd1761828d52a16386d1fb9d4af76f8b5aae73c6ac494e',
-    }
+    const withdrawlEvent = this.events.events.find(e=>e.nullifierHash == nullifierHex)
     compliance.withdrawl = {
-      transaction:withdrawlEvent.txHash,
-      address:withdrawlEvent.to,
-      id:withdrawlEvent.nullifierHash
+      transaction:withdrawlEvent?.txHash,
+      address:withdrawlEvent?.to,
+      id:nullifierHex
     }
     return compliance
   }
@@ -165,12 +160,12 @@ export class SherpaSDK {
       args: [args[0], args[1], args[2], args[3], args[4], args[5]]
     }
 
-    if(!relayerMode){
-      await pitContract.methods.withdraw(contractInfo.contractAddress, proof, ...args).send({
-        from: withdrawAddress,
-        gas: 1000000
-      });
-    }
+    // if(!relayerMode){
+    //   await pitContract.methods.withdraw(contractInfo.contractAddress, proof, ...args).send({
+    //     from: withdrawAddress,
+    //     gas: 1000000
+    //   });
+    // }
 
 
     if(relayerMode){
