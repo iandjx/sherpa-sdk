@@ -12,9 +12,12 @@ import {actions, sortEventsByLeafIndex} from "./events";
 
 export class SherpaSDK {
   constructor(chainId, web3, withdrawKeyDomain) {
+    if (!chainId || !web3){
+      throw new Error("Must initialize sherpa sdk with chainId and web3")
+    }
     this.chainId = chainId;
     this.web3 = web3
-    this.withdrawKeyDomain = withdrawKeyDomain
+    this.withdrawKeyDomain = withdrawKeyDomain || ""
   }
 
   async fetchCircuitAndProvingKey(){
@@ -47,7 +50,7 @@ export class SherpaSDK {
     }
   }
   getRelayerList(){
-    getters.getRelayersList(this.chainId)
+    return getters.getRelayersList(this.chainId)
   }
   async downloadNote(noteString, saveAs){
     let blob = new Blob([noteString], {
@@ -145,14 +148,14 @@ export class SherpaSDK {
     }
 
     /** calc args for proof depending on relayer **/
-    //todo confirm if this is backwards?
-    const relayerProofArgs = relayerMode ? {
+    //todo confirm that this was reversed in the provided code
+    const relayerProofArgs = !relayerMode ? {
       totalFee:0,
       rewardAccount:0,
       refundAmount:0
     } : {
-      totalFee:BigInt(selectedRelayer.status.tornadoServiceFee*10000).mul(BigInt(contractInfo.value)).div(BigInt(1000000)).add(225*350000),
-      rewardAccount:selectedRelayer.status.rewardAccount,
+      totalFee:BigInt(selectedRelayer.status?.tornadoServiceFee*10000 || 0).mul(BigInt(contractInfo.value)).div(BigInt(1000000)).add(225*350000),
+      rewardAccount:selectedRelayer.status?.rewardAccount,
       refundAmount:parsedNote.amount * (10**18)
     }
 
