@@ -4,22 +4,22 @@ import {
   parseNote,
   generateProofSherpa
 } from "./snark-functions";
-import networkConfig from "./networkConfig";
+import axios from "axios"
 import {state, getters, sherpaProxyABI, ethSherpaABI} from "./constants"
 import {actions, sortEventsByLeafIndex} from "./events";
 
-const withdrawKeyDomain = String(process.env.WITHDRAW_KEY_DOMAIN)
+
 
 export class SherpaSDK {
-  constructor(chainId, web3) {
+  constructor(chainId, web3, withdrawKeyDomain) {
     this.chainId = chainId;
     this.web3 = web3
+    this.withdrawKeyDomain = withdrawKeyDomain
   }
 
   async fetchCircuitAndProvingKey(){
-    //todo promise.all
-    const circuit = await (await fetch(`${withdrawKeyDomain}/withdraw.json`)).json()
-    const provingKey = await (await fetch(`${withdrawKeyDomain}/withdraw_proving_key.bin`)).arrayBuffer()
+    const circuit = await (await fetch(`${this.withdrawKeyDomain}/withdraw.json`)).json()
+    const provingKey = await (await fetch(`${this.withdrawKeyDomain}/withdraw_proving_key.bin`)).arrayBuffer()
     this.circuit=circuit
     this.provingKey=provingKey
   }
@@ -50,7 +50,7 @@ export class SherpaSDK {
     getters.getRelayersList(this.chainId)
   }
   async downloadNote(noteString, saveAs){
-    let blob = new Blob(noteString, {
+    let blob = new Blob([noteString], {
       type: "text/plain;charset=utf-8"
     });
     const currentDate = new Date();
@@ -110,10 +110,14 @@ export class SherpaSDK {
       });
   }
   async withdraw(withdrawNote, withdrawAddress, relayerMode, selectedRelayer) {
+    /** sanity checks **/
     if (!this.events || ! this.circuit || !this.provingKey){
       throw new Error("Sherpa SDK not initialized with events or circuir/proving key")
     }
-    // let web3;
+    if (relayerMode && !selectedRelayer){
+      throw new Error("A relayer must be selected to use relayerMode")
+    }
+
     const parsedNote = parseNote(withdrawNote);
     const addressRegex = /^0x[a-fA-F0-9]{40}/g
     const match = addressRegex.exec(withdrawAddress)
@@ -121,17 +125,7 @@ export class SherpaSDK {
     if (!match) {
       throw new Error("The address has invalid format")
     }
-
-    if(relayerMode) {
-      const id = this.chainId;
-      const network = { ...networkConfig[`chainId${id}`], id: Number(id) };
-      // web3 = new Web3(network.rpcUrls.Figment.url);//todo Figment? - maybe move this logic to calling function?
-    } else {
-      // web3 = this.$manager.web3;
-      // assert(parsedNote.netId === await web3.eth.getChainId(), "Your wallet is not configured to the correct network.")//todo redo
-    }
-    // console.log("parsedNote", parsedNote);
-    // console.log("hex commitment", toHex(parsedNote.deposit.commitment));
+    /** setup **/
     const contractInfo = getters.getNoteContractInfo(parsedNote);
     let sherpaProxyContractAddress = getters.getSherpaProxyContract(this.chainId);
     const pitContract = new this.web3.eth.Contract(
@@ -143,44 +137,49 @@ export class SherpaSDK {
       ethSherpaABI,
       contractInfo.contractAddress
     );
-
-    const relayer = selectedRelayer//todo getters.getSelectedRelayer(state);
-    const relayerFee = BigInt(0)//todo BigInt(relayer.status.tornadoServiceFee*10000).mul(BigInt(contractInfo.value)).div(BigInt(1000000))
-    const gas = BigInt(225*350000)
-    let totalFee = relayerFee.add(gas)
-    let rewardAccount = 0//todo relayer.status.rewardAccount//todo currently undefined - but we are not using a relayer for now
-    let refundAmount = 0 //parsedNote.amount * (10**18)
-    if(relayerMode){
-      totalFee = 0
-      rewardAccount = 0
-      refundAmount = 0
-    }
     const depositEvents = this.events.events.filter(e => e.type === 'Deposit').sort(sortEventsByLeafIndex);
-    // console.log("xxx",{sherpaContract, deposit:parsedNote.deposit, withdrawAddress, depositEvents, circuit:this.circuit, provingKey:this.provingKey, rewardAccount, totalFee, refundAmount})
-    // assert(parsedNote.netId === relayer.chainId || parsedNote.netId === '*', 'This relayer is for a different network')
-    const { proof, args } = await generateProofSherpa(sherpaContract, parsedNote.deposit, withdrawAddress, depositEvents, this.circuit, this.provingKey, rewardAccount, totalFee, refundAmount)
-    const requestBody = {
-      proof: proof,
-      contract: contractInfo.contractAddress,
-      args: [args[0], args[1], args[2], args[3], args[4], args[5]]
+
+    /** more sanity checks **/
+    if (parsedNote.netId !== selectedRelayer.chainId && parsedNote.netId !== '*'){
+      throw new Error('This relayer is for a different network')
     }
 
-    if(!relayerMode){
+    /** calc args for proof depending on relayer **/
+    //todo confirm if this is backwards?
+    const relayerProofArgs = relayerMode ? {
+      totalFee:0,
+      rewardAccount:0,
+      refundAmount:0
+    } : {
+      totalFee:BigInt(selectedRelayer.status.tornadoServiceFee*10000).mul(BigInt(contractInfo.value)).div(BigInt(1000000)).add(225*350000),
+      rewardAccount:selectedRelayer.status.rewardAccount,
+      refundAmount:parsedNote.amount * (10**18)
+    }
+
+    /** calculate proof **/
+    const { proof, args } = await generateProofSherpa(sherpaContract, parsedNote.deposit, withdrawAddress, depositEvents, this.circuit, this.provingKey, relayerProofArgs.rewardAccount, relayerProofArgs.totalFee, relayerProofArgs.refundAmount)
+
+    /** execute **/
+    if(relayerMode) {
+      //can replace web3 with a non wallet web3 here
+      const requestBody = {
+        proof: proof,
+        contract: contractInfo.contractAddress,
+        args: [args[0], args[1], args[2], args[3], args[4], args[5]]
+      }
+      return await axios.post(
+      selectedRelayer.url +'/v1/tornadoWithdraw', requestBody
+      );
+    } else {
+      if (parsedNote.netId !== await this.web3.eth.getChainId()){
+        throw new Error("Your wallet is not configured to the correct network.")
+      }
       return await pitContract.methods.withdraw(contractInfo.contractAddress, proof, ...args).send({
         from: withdrawAddress,
         gas: 1000000
       });
     }
-
-
-    if(relayerMode){
-      // const response = await this.$axios.$post(//todo fix
-      //   relayer.url +'/v1/tornadoWithdraw', requestBody
-      // );
-    }
   }
-
-
 }
 
 

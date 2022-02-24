@@ -297,12 +297,6 @@ export const getters = {
     return (chainId == 43114)
       ? state.sherpaProxyContract.mainnet : state.sherpaProxyContract.fuji
   },
-  // //todo fix
-  // getSelectedRelayer: state => {
-  //   return state.relayersList[0]
-  //   //todo fix
-  //   // return state.relayersList.find(relayer => relayer.id === state.selectedRelayerId);
-  // },
   getRelayersList: (chainId) => {
     return state.relayersList.filter(relayer => relayer.chainId === chainId);
   },

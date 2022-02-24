@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@urql/core": "^2.4.1",
+    "axios": "^0.26.0",
     "circomlib": "git+https://github.com/tornadocash/circomlib.git#3b492f9801573eebcfe1b6c584afe8a3beecf2b4",
     "dotenv": "^16.0.0",
     "graphql": "^16.3.0",
