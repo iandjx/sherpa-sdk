@@ -163,7 +163,6 @@ async function subgraphDepositQuery(first, offset, amnt, curr, chainId) {
   const response = await request(APIURL, depQuery, variables).catch((err) =>
     console.log(err)
   );
-  console.log(response)
   return response.deposits;
 
 }

@@ -54,6 +54,22 @@ describe("sherpa", () => {
       await sherpaSDK.sendDeposit(etherToWei(amount), deposit.commitment,currency,fromAddress)//send funds to the smart contract
     })
   })
+  describe("compliance",()=>{
+    it("should withdraw funds",async ()=>{
+      /**User supplied info **/
+      const uniqueKey = "sherpa-avax-10000000000000000000-43113-0x7bc53b7269c2efd58dc31dc38f4384300f6caba638345f014064ea37cce4c197482fcd323f68143ea19128c3076e4b1222f36fb295483d28fa4aaa195f95"
+      /** Initialize SDK **/
+      const sherpaSDK = new SherpaSDK(netId, web3)
+      const compliance = await sherpaSDK.getCompliance(uniqueKey)
+      expect(compliance.deposit.transaction).toBeTruthy()
+      expect(compliance.deposit.address).toBeTruthy()
+      expect(compliance.deposit.id).toBeTruthy()
+      expect(compliance.withdrawl.transaction).toBeTruthy()
+      expect(compliance.withdrawl.address).toBeTruthy()
+      expect(compliance.withdrawl.id).toBeTruthy()
+    })
+  })
+
   describe("withdraw",()=>{
     it("should withdraw funds",async ()=>{
 

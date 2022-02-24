@@ -62,6 +62,32 @@ export class SherpaSDK {
       filename
     );
   }
+
+  async getCompliance(uniqueKey){
+    const [_, selectedToken, valueWei] = uniqueKey.split("-")
+    const commitment = "0x11ba1eb85ecbaf7c1c3ad7e6248bbfb7ef5cf8f68678a6d77162cb0e1080fc28"//todo
+    await this.fetchEvents(valueWei, selectedToken)
+    const compliance = {deposit:null, withdrawl:null}
+    const depositEvent = this.events.events.find(e=>e.commitment == commitment)[0]
+    compliance.deposit = {
+      transaction:depositEvent.txHash,
+      address:"0x12345",//todo make blockchain call
+      id:commitment
+    }
+    const nullifyerHash = ""//todo get nullifyer hash from commitment?
+    const withdrawlEvent = {
+      to: '0xa8b3ddaf21bc566fc0623bde1060864f934829e3',
+      nullifierHash:
+        '0x0ae4a297ad7bc65a5bbd1761828d52a16386d1fb9d4af76f8b5aae73c6ac494e',
+    }
+    compliance.withdrawl = {
+      transaction:withdrawlEvent.txHash,
+      address:withdrawlEvent.to,
+      id:withdrawlEvent.nullifierHash
+    }
+    return compliance
+  }
+
   async sendDeposit(valueWei, commitment, selectedToken, fromAddress) {
     const sherpaProxyAddress = getters.getSherpaProxyContract(this.netId)
     const selectedContractAddress = getters.getNoteContractInfo({
