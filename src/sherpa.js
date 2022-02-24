@@ -8,17 +8,18 @@ import networkConfig from "./networkConfig";
 import {state, getters, sherpaProxyABI, ethSherpaABI} from "./constants"
 import {actions, sortEventsByLeafIndex} from "./events";
 
+const withdrawKeyDomain = String(process.env.WITHDRAW_KEY_DOMAIN)
+
 export class SherpaSDK {
   constructor(chainId, web3) {
     this.chainId = chainId;
     this.web3 = web3
   }
 
-  //todo
   async fetchCircuitAndProvingKey(){
     //todo promise.all
-    const circuit = await (await fetch('https://app.sherpa.cash/withdraw.json')).json()
-    const provingKey = await (await fetch('https://app.sherpa.cash/withdraw_proving_key.bin')).arrayBuffer()
+    const circuit = await (await fetch(`${withdrawKeyDomain}/withdraw.json`)).json()
+    const provingKey = await (await fetch(`${withdrawKeyDomain}/withdraw_proving_key.bin`)).arrayBuffer()
     this.circuit=circuit
     this.provingKey=provingKey
   }
