@@ -185,10 +185,12 @@ export class SherpaSDK {
     };
 
     // if(!relayerMode){
-    //   await pitContract.methods.withdraw(contractInfo.contractAddress, proof, ...args).send({
-    //     from: withdrawAddress,
-    //     gas: 1000000
-    //   });
+    await pitContract.methods
+      .withdraw(contractInfo.contractAddress, proof, ...args)
+      .send({
+        from: withdrawAddress,
+        gas: 1000000,
+      });
     // }
 
     if (relayerMode) {
