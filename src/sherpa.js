@@ -146,21 +146,23 @@ export class SherpaSDK {
     if (parsedNote.netId !== selectedRelayer.chainId && parsedNote.netId !== '*'){
       throw new Error('This relayer is for a different network')
     }
+    /** Calculate relayer info **/
+    let totalFee = 0
+    let rewardAccount = 0
+    let refundAmount = 0
 
-    /** calc args for proof depending on relayer **/
-    //todo confirm that this was reversed in the provided code
-    const relayerProofArgs = !relayerMode ? {
-      totalFee:0,
-      rewardAccount:0,
-      refundAmount:0
-    } : {
-      totalFee:BigInt(selectedRelayer.status?.tornadoServiceFee*10000 || 0).mul(BigInt(contractInfo.value)).div(BigInt(1000000)).add(225*350000),
-      rewardAccount:selectedRelayer.status?.rewardAccount,
-      refundAmount:parsedNote.amount * (10**18)
+    if(relayerMode){//todo !relayerMode was given logic
+      const relayerStatus = await getters.getRelayerStatus(selectedRelayer)
+      const relayerWithStatus = {...selectedRelayer, status:relayerStatus}
+      const relayerFee = BigInt(relayerWithStatus.status?.tornadoServiceFee*10000).mul(BigInt(contractInfo.value)).div(BigInt(1000000))
+      const gas = BigInt(225*350000)
+      totalFee = relayerFee.add(gas)
+      rewardAccount = relayerWithStatus.status?.rewardAccount
+      refundAmount = 0 //parsedNote.amount * (10**18)
     }
 
     /** calculate proof **/
-    const { proof, args } = await generateProofSherpa(sherpaContract, parsedNote.deposit, withdrawAddress, depositEvents, this.circuit, this.provingKey, relayerProofArgs.rewardAccount, relayerProofArgs.totalFee, relayerProofArgs.refundAmount)
+    const { proof, args } = await generateProofSherpa(sherpaContract, parsedNote.deposit, withdrawAddress, depositEvents, this.circuit, this.provingKey, rewardAccount, totalFee, refundAmount)
 
     /** execute **/
     if(relayerMode) {
