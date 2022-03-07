@@ -112,13 +112,13 @@ export class SherpaSDK {
         gas: 2100000
       });
   }
-  async withdraw(withdrawNote, withdrawAddress, relayerMode, selectedRelayer) {
+  async withdraw(withdrawNote, withdrawAddress, selfRelay, selectedRelayer) {
     /** sanity checks **/
     if (!this.events || ! this.circuit || !this.provingKey){
       throw new Error("Sherpa SDK not initialized with events or circuir/proving key")
     }
-    if (relayerMode && !selectedRelayer){
-      throw new Error("A relayer must be selected to use relayerMode")
+    if (!selfRelay && !selectedRelayer){
+      throw new Error("A relayer must be selected to use non self relay")
     }
 
     const parsedNote = parseNote(withdrawNote);
@@ -151,7 +151,7 @@ export class SherpaSDK {
     let rewardAccount = 0
     let refundAmount = 0
 
-    if(relayerMode){//todo !relayerMode was given logic
+    if(!selfRelay){
       const relayerStatus = await getters.getRelayerStatus(selectedRelayer)
       const relayerWithStatus = {...selectedRelayer, status:relayerStatus}
       const relayerFee = BigInt(relayerWithStatus.status?.tornadoServiceFee*10000).mul(BigInt(contractInfo.value)).div(BigInt(1000000))
@@ -165,7 +165,7 @@ export class SherpaSDK {
     const { proof, args } = await generateProofSherpa(sherpaContract, parsedNote.deposit, withdrawAddress, depositEvents, this.circuit, this.provingKey, rewardAccount, totalFee, refundAmount)
 
     /** execute **/
-    if(relayerMode) {
+    if(!selfRelay) {
       //can replace web3 with a non wallet web3 here
       const requestBody = {
         proof: proof,
