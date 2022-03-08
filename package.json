@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/sherpa.js",
+  "type": "module",
   "scripts": {
     "test": "jest"
   },

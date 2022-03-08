@@ -154,9 +154,7 @@ export class SherpaSDK {
     if(!selfRelay){
       const relayerStatus = await getters.getRelayerStatus(selectedRelayer)
       const relayerWithStatus = {...selectedRelayer, status:relayerStatus}
-      const relayerFee = BigInt(relayerWithStatus.status?.tornadoServiceFee*10000).mul(BigInt(contractInfo.value)).div(BigInt(1000000))
-      const gas = BigInt(225*350000)
-      totalFee = relayerFee.add(gas)
+      totalFee = BigInt(relayerWithStatus.status?.tornadoServiceFee*10000).mul(BigInt(contractInfo.value)).div(BigInt(1000000)).add(BigInt(225*350000))
       rewardAccount = relayerWithStatus.status?.rewardAccount
       refundAmount = 0 //parsedNote.amount * (10**18)
     }
