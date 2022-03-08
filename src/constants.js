@@ -300,4 +300,7 @@ export const getters = {
   getRelayersList: (chainId) => {
     return state.relayersList.filter(relayer => relayer.chainId === chainId);
   },
+  getRelayerStatus: async (relayer) =>{
+    return await (await fetch(`${relayer.url}/v1/status`)).json()
+  }
 };
