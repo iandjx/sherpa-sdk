@@ -1,10 +1,12 @@
 {
-  "name": "nodejs",
+  "name": "@iandjx/sherpasdk",
   "version": "1.0.0",
   "description": "",
-  "main": "src/sherpa.js",
+  "main": "./dist/sherpa.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "tsup ./src/sherpa.js",
+    "publish": "npm run build && npm publish --access public "
   },
   "keywords": [],
   "author": "",
@@ -14,6 +16,7 @@
     "jest-environment-jsdom": "^25.5.0",
     "request": "^2.88.2",
     "ts-jest": "^25.5.0",
+    "tsup": "^5.11.13",
     "typescript": "^4.5.5"
   },
   "dependencies": {
