@@ -1,11 +1,11 @@
 {
-  "name": "nodejs",
+  "name": "sherpa-sdk",
   "version": "1.0.0",
   "description": "",
-  "main": "src/sherpa.js",
-  "type": "module",
+  "main": "./dist/sherpa.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "tsup ./src/sherpa.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +15,7 @@
     "jest-environment-jsdom": "^25.5.0",
     "request": "^2.88.2",
     "ts-jest": "^25.5.0",
+    "tsup": "^5.11.13",
     "typescript": "^4.5.5"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
     "axios": "^0.26.0",
     "circomlib": "git+https://github.com/tornadocash/circomlib.git#3b492f9801573eebcfe1b6c584afe8a3beecf2b4",
     "dotenv": "^16.0.0",
+    "electron": "^17.1.1",
     "graphql": "^16.3.0",
     "graphql-request": "^4.0.0",
     "isomorphic-fetch": "^3.0.0",
