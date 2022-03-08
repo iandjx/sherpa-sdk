@@ -962,7 +962,7 @@ var SherpaSDK = class {
       rewardAccount: 0,
       refundAmount: 0
     } : {
-      totalFee: BigInt(((_a = selectedRelayer.status) == null ? void 0 : _a.tornadoServiceFee) * 1e4 || 0).mul(BigInt(contractInfo.value)).div(BigInt(1e6)).add(225 * 35e4),
+      totalFee: BigInt(((_a = selectedRelayer.status) == null ? void 0 : _a.tornadoServiceFee) * 1e4 || 0).mul(BigInt(contractInfo.value)).div(BigInt(1e6)).add(BigInt(225 * 35e4)),
       rewardAccount: (_b = selectedRelayer.status) == null ? void 0 : _b.rewardAccount,
       refundAmount: parsedNote.amount * 10 ** 18
     };
