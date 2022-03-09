@@ -1,12 +1,11 @@
 {
-  "name": "ian-sherpasdk-beta",
-  "version": "0.0.5",
+  "name": "sherpa-sdk",
+  "version": "1.0.0",
   "description": "",
   "main": "./dist/sherpa.js",
   "scripts": {
     "test": "jest",
-    "build": "tsup ./src/sherpa.js",
-    "publish": "npm run build && npm publish --access public "
+    "build": "tsup ./src/sherpa.js"
   },
   "keywords": [],
   "author": "",
