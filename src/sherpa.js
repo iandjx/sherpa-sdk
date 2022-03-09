@@ -117,7 +117,7 @@ export class SherpaSDK {
     if (!this.events || ! this.circuit || !this.provingKey){
       throw new Error("Sherpa SDK not initialized with events or circuir/proving key")
     }
-    if (!selfRelay && !selectedRelayer){
+    if (!selfRelay && !(selectedRelayer && selectedRelayer.chainId && selectedRelayer.url)){
       throw new Error("A relayer must be selected to use non self relay")
     }
 
