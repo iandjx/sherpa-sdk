@@ -1,6 +1,6 @@
 {
-  "name": "sherpa-sdk",
-  "version": "1.0.0",
+  "name": "ian-sherpasdk-beta",
+  "version": "0.0.10",
   "description": "",
   "main": "./dist/sherpa.js",
   "scripts": {

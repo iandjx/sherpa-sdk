@@ -8,86 +8,51 @@ var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __defNormalProp = (obj, key, value) =>
-  key in obj
-    ? __defProp(obj, key, {
-        enumerable: true,
-        configurable: true,
-        writable: true,
-        value,
-      })
-    : (obj[key] = value);
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __spreadValues = (a, b) => {
   for (var prop in b || (b = {}))
-    if (__hasOwnProp.call(b, prop)) __defNormalProp(a, prop, b[prop]);
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
   if (__getOwnPropSymbols)
     for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop)) __defNormalProp(a, prop, b[prop]);
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
     }
   return a;
 };
 var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
-var __markAsModule = (target) =>
-  __defProp(target, "__esModule", { value: true });
-var __esm = (fn, res) =>
-  function __init() {
-    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])((fn = 0))), res;
-  };
-var __commonJS = (cb, mod) =>
-  function __require() {
-    return (
-      mod ||
-        (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod),
-      mod.exports
-    );
-  };
+var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
+var __esm = (fn, res) => function __init() {
+  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+};
+var __commonJS = (cb, mod) => function __require() {
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+};
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __reExport = (target, module2, copyDefault, desc) => {
-  if (
-    (module2 && typeof module2 === "object") ||
-    typeof module2 === "function"
-  ) {
+  if (module2 && typeof module2 === "object" || typeof module2 === "function") {
     for (let key of __getOwnPropNames(module2))
       if (!__hasOwnProp.call(target, key) && (copyDefault || key !== "default"))
-        __defProp(target, key, {
-          get: () => module2[key],
-          enumerable:
-            !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable,
-        });
+        __defProp(target, key, { get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable });
   }
   return target;
 };
 var __toESM = (module2, isNodeMode) => {
-  return __reExport(
-    __markAsModule(
-      __defProp(
-        module2 != null ? __create(__getProtoOf(module2)) : {},
-        "default",
-        !isNodeMode && module2 && module2.__esModule
-          ? { get: () => module2.default, enumerable: true }
-          : { value: module2, enumerable: true }
-      )
-    ),
-    module2
-  );
+  return __reExport(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", !isNodeMode && module2 && module2.__esModule ? { get: () => module2.default, enumerable: true } : { value: module2, enumerable: true })), module2);
 };
 var __toCommonJS = /* @__PURE__ */ ((cache) => {
   return (module2, temp) => {
-    return (
-      (cache && cache.get(module2)) ||
-      ((temp = __reExport(__markAsModule({}), module2, 1)),
-      cache && cache.set(module2, temp),
-      temp)
-    );
+    return cache && cache.get(module2) || (temp = __reExport(__markAsModule({}), module2, 1), cache && cache.set(module2, temp), temp);
   };
 })(typeof WeakMap !== "undefined" ? /* @__PURE__ */ new WeakMap() : 0);
 
 // node_modules/tsup/assets/cjs_shims.js
 var init_cjs_shims = __esm({
-  "node_modules/tsup/assets/cjs_shims.js"() {},
+  "node_modules/tsup/assets/cjs_shims.js"() {
+  }
 });
 
 // src/lib/Storage.js
@@ -125,7 +90,7 @@ var require_Storage = __commonJS({
       }
     };
     module2.exports = JsStorage;
-  },
+  }
 });
 
 // src/lib/MiMC.js
@@ -142,7 +107,7 @@ var require_MiMC = __commonJS({
       }
     };
     module2.exports = MimcSpongeHasher;
-  },
+  }
 });
 
 // src/lib/merkleTree.js
@@ -159,46 +124,28 @@ var require_merkleTree = __commonJS({
         this.n_levels = n_levels;
         this.zero_values = [];
         this.totalElements = 0;
-        let current_zero_value =
-          "21663839004416932945382355908790599225266501822907911457504978515578255421292";
+        let current_zero_value = "21663839004416932945382355908790599225266501822907911457504978515578255421292";
         this.zero_values.push(current_zero_value);
         for (let i = 0; i < n_levels; i++) {
-          current_zero_value = this.hasher.hash(
-            i,
-            current_zero_value,
-            current_zero_value
-          );
+          current_zero_value = this.hasher.hash(i, current_zero_value, current_zero_value);
           this.zero_values.push(current_zero_value.toString());
         }
         if (defaultElements) {
           let level = 0;
           this.totalElements = defaultElements.length;
           defaultElements.forEach((element, i) => {
-            this.storage.put(
-              MerkleTree.index_to_key(prefix, level, i),
-              element
-            );
+            this.storage.put(MerkleTree.index_to_key(prefix, level, i), element);
           });
           level++;
           let numberOfElementsInLevel = Math.ceil(defaultElements.length / 2);
           for (level; level <= this.n_levels; level++) {
             for (let i = 0; i < numberOfElementsInLevel; i++) {
               const leftKey = MerkleTree.index_to_key(prefix, level - 1, 2 * i);
-              const rightKey = MerkleTree.index_to_key(
-                prefix,
-                level - 1,
-                2 * i + 1
-              );
+              const rightKey = MerkleTree.index_to_key(prefix, level - 1, 2 * i + 1);
               const left = this.storage.get(leftKey);
-              const right = this.storage.get_or_element(
-                rightKey,
-                this.zero_values[level - 1]
-              );
+              const right = this.storage.get_or_element(rightKey, this.zero_values[level - 1]);
               const subRoot = this.hasher.hash(null, left, right);
-              this.storage.put(
-                MerkleTree.index_to_key(prefix, level, i),
-                subRoot
-              );
+              this.storage.put(MerkleTree.index_to_key(prefix, level, i), subRoot);
             }
             numberOfElementsInLevel = Math.ceil(numberOfElementsInLevel / 2);
           }
@@ -209,10 +156,7 @@ var require_merkleTree = __commonJS({
         return key;
       }
       async root() {
-        let root = await this.storage.get_or_element(
-          MerkleTree.index_to_key(this.prefix, this.n_levels, 0),
-          this.zero_values[this.n_levels]
-        );
+        let root = await this.storage.get_or_element(MerkleTree.index_to_key(this.prefix, this.n_levels, 0), this.zero_values[this.n_levels]);
         return root;
       }
       async path(index) {
@@ -225,34 +169,21 @@ var require_merkleTree = __commonJS({
             this.path_index = [];
           }
           async handle_index(level, element_index, sibling_index) {
-            const sibling = await this.storage.get_or_element(
-              MerkleTree.index_to_key(this.prefix, level, sibling_index),
-              this.zero_values[level]
-            );
+            const sibling = await this.storage.get_or_element(MerkleTree.index_to_key(this.prefix, level, sibling_index), this.zero_values[level]);
             this.path_elements.push(sibling);
             this.path_index.push(element_index % 2);
           }
         }
         index = Number(index);
-        let traverser = new PathTraverser(
-          this.prefix,
-          this.storage,
-          this.zero_values
-        );
-        const root = await this.storage.get_or_element(
-          MerkleTree.index_to_key(this.prefix, this.n_levels, 0),
-          this.zero_values[this.n_levels]
-        );
-        const element = await this.storage.get_or_element(
-          MerkleTree.index_to_key(this.prefix, 0, index),
-          this.zero_values[0]
-        );
+        let traverser = new PathTraverser(this.prefix, this.storage, this.zero_values);
+        const root = await this.storage.get_or_element(MerkleTree.index_to_key(this.prefix, this.n_levels, 0), this.zero_values[this.n_levels]);
+        const element = await this.storage.get_or_element(MerkleTree.index_to_key(this.prefix, 0, index), this.zero_values[0]);
         await this.traverse(index, traverser);
         return {
           root,
           path_elements: traverser.path_elements,
           path_index: traverser.path_index,
-          element,
+          element
         };
       }
       async update(index, element, insert = false) {
@@ -273,15 +204,9 @@ var require_merkleTree = __commonJS({
             }
             async handle_index(level, element_index, sibling_index) {
               if (level == 0) {
-                this.original_element = await this.storage.get_or_element(
-                  MerkleTree.index_to_key(this.prefix, level, element_index),
-                  this.zero_values[level]
-                );
+                this.original_element = await this.storage.get_or_element(MerkleTree.index_to_key(this.prefix, level, element_index), this.zero_values[level]);
               }
-              const sibling = await this.storage.get_or_element(
-                MerkleTree.index_to_key(this.prefix, level, sibling_index),
-                this.zero_values[level]
-              );
+              const sibling = await this.storage.get_or_element(MerkleTree.index_to_key(this.prefix, level, sibling_index), this.zero_values[level]);
               let left, right;
               if (element_index % 2 == 0) {
                 left = this.current_element;
@@ -292,22 +217,16 @@ var require_merkleTree = __commonJS({
               }
               this.key_values_to_put.push({
                 key: MerkleTree.index_to_key(this.prefix, level, element_index),
-                value: this.current_element,
+                value: this.current_element
               });
               this.current_element = this.hasher.hash(level, left, right);
             }
           }
-          let traverser = new UpdateTraverser(
-            this.prefix,
-            this.storage,
-            this.hasher,
-            element,
-            this.zero_values
-          );
+          let traverser = new UpdateTraverser(this.prefix, this.storage, this.hasher, element, this.zero_values);
           await this.traverse(index, traverser);
           traverser.key_values_to_put.push({
             key: MerkleTree.index_to_key(this.prefix, this.n_levels, 0),
-            value: traverser.current_element,
+            value: traverser.current_element
           });
           await this.storage.put_batch(traverser.key_values_to_put);
         } catch (e) {
@@ -334,9 +253,7 @@ var require_merkleTree = __commonJS({
       }
       getIndexByElement(element) {
         for (let i = this.totalElements - 1; i >= 0; i--) {
-          const elementFromTree = this.storage.get(
-            MerkleTree.index_to_key(this.prefix, 0, i)
-          );
+          const elementFromTree = this.storage.get(MerkleTree.index_to_key(this.prefix, 0, i));
           if (elementFromTree === element) {
             return i;
           }
@@ -345,13 +262,13 @@ var require_merkleTree = __commonJS({
       }
     };
     module2.exports = MerkleTree;
-  },
+  }
 });
 
 // src/sherpa.js
 var sherpa_exports = {};
 __export(sherpa_exports, {
-  SherpaSDK: () => SherpaSDK,
+  SherpaSDK: () => SherpaSDK
 });
 init_cjs_shims();
 
@@ -371,10 +288,7 @@ function pedersenHash(data) {
   return circomlib.babyJub.unpackPoint(circomlib.pedersenHash.hash(data))[0];
 }
 function toHex(number, length = 32) {
-  const str =
-    number instanceof Buffer
-      ? number.toString("hex")
-      : bigInt(number).toString(16);
+  const str = number instanceof Buffer ? number.toString("hex") : bigInt(number).toString(16);
   return "0x" + str.padStart(length * 2, "0");
 }
 function getNoteStringAndCommitment(currency, amount, netId) {
@@ -382,7 +296,7 @@ function getNoteStringAndCommitment(currency, amount, netId) {
   const secret = rbigint(31);
   const preimage = Buffer.concat([
     nullifier.leInt2Buff(31),
-    secret.leInt2Buff(31),
+    secret.leInt2Buff(31)
   ]);
   console.log("preimage", preimage);
   let commitment = pedersenHash(preimage);
@@ -393,8 +307,7 @@ function getNoteStringAndCommitment(currency, amount, netId) {
   return { noteString, commitment };
 }
 function parseNote(noteString) {
-  const noteRegex =
-    /sherpa-(?<currency>\w+)-(?<amount>[\d.]+)-(?<netId>\d+)-0x(?<note>[0-9a-fA-F]{124})/g;
+  const noteRegex = /sherpa-(?<currency>\w+)-(?<amount>[\d.]+)-(?<netId>\d+)-0x(?<note>[0-9a-fA-F]{124})/g;
   const match = noteRegex.exec(noteString);
   if (!match) {
     throw new Error("The note has invalid format" + JSON.stringify(noteString));
@@ -408,14 +321,14 @@ function parseNote(noteString) {
     currency: match.groups.currency,
     amount: match.groups.amount,
     netId,
-    deposit,
+    deposit
   };
 }
 function createDeposit({ nullifier, secret }) {
   let deposit = { nullifier, secret };
   deposit.preimage = Buffer.concat([
     deposit.nullifier.leInt2Buff(31),
-    deposit.secret.leInt2Buff(31),
+    deposit.secret.leInt2Buff(31)
   ]);
   deposit.commitment = pedersenHash(deposit.preimage);
   deposit.commitmentHex = toHex(deposit.commitment);
@@ -426,38 +339,18 @@ function createDeposit({ nullifier, secret }) {
 async function generateMerkleProofSherpa(events, deposit, contract) {
   const leaves = events.map((e) => e.commitment);
   const tree = new merkleTree(MERKLE_TREE_HEIGHT, leaves.reverse());
-  const depositEvent = events.find(
-    (e) => e.commitment === toHex(deposit.commitment)
-  );
+  const depositEvent = events.find((e) => e.commitment === toHex(deposit.commitment));
   const leafIndex = depositEvent ? depositEvent.leafIndex : -1;
-  const isValidRoot = await contract.methods
-    .isKnownRoot(toHex(await tree.root()))
-    .call();
+  const isValidRoot = await contract.methods.isKnownRoot(toHex(await tree.root())).call();
   console.log("isValidRoot", isValidRoot);
-  const isSpent = await contract.methods
-    .isSpent(toHex(deposit.nullifierHash))
-    .call();
+  const isSpent = await contract.methods.isSpent(toHex(deposit.nullifierHash)).call();
   assert(isValidRoot === true, "Merkle tree is corrupted");
   assert(isSpent === false, "The note is already spent");
   assert(leafIndex >= 0, "The deposit is not found in the tree");
   return tree.path(leafIndex);
 }
-async function generateProofSherpa(
-  contract,
-  deposit,
-  recipient,
-  events,
-  circuit,
-  provingKey,
-  relayer = 0,
-  fee = 0,
-  refund = 0
-) {
-  const { root, path_elements, path_index } = await generateMerkleProofSherpa(
-    events,
-    deposit,
-    contract
-  );
+async function generateProofSherpa(contract, deposit, recipient, events, circuit, provingKey, relayer = 0, fee = 0, refund = 0) {
+  const { root, path_elements, path_index } = await generateMerkleProofSherpa(events, deposit, contract);
   const input = {
     root,
     nullifierHash: deposit.nullifierHash,
@@ -468,17 +361,12 @@ async function generateProofSherpa(
     nullifier: deposit.nullifier,
     secret: deposit.secret,
     pathElements: path_elements,
-    pathIndices: path_index,
+    pathIndices: path_index
   };
   const groth16 = await buildGroth16();
   console.log("Generating SNARK proof");
   console.time("Proof time");
-  const proofData = await websnarkUtils.genWitnessAndProve(
-    groth16,
-    input,
-    circuit,
-    provingKey
-  );
+  const proofData = await websnarkUtils.genWitnessAndProve(groth16, input, circuit, provingKey);
   const { proof } = websnarkUtils.toSolidityInput(proofData);
   console.timeEnd("Proof time");
   const args = [
@@ -487,14 +375,9 @@ async function generateProofSherpa(
     toHex(input.recipient, 20),
     toHex(input.relayer, 20),
     toHex(input.fee),
-    toHex(input.refund),
+    toHex(input.refund)
   ];
-  const extraArgs = [
-    deposit.nullifier,
-    deposit.secret,
-    path_elements,
-    path_index,
-  ];
+  const extraArgs = [deposit.nullifier, deposit.secret, path_elements, path_index];
   return { proof, args, extraArgs };
 }
 
@@ -505,56 +388,52 @@ var import_axios = __toESM(require("axios"));
 init_cjs_shims();
 var ethSherpaABI = [
   {
-    type: "function",
-    name: "isSpent",
-    inputs: [{ name: "_nullifierHash", type: "bytes32" }],
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
+    "type": "function",
+    "name": "isSpent",
+    "inputs": [{ "name": "_nullifierHash", "type": "bytes32" }],
+    "outputs": [{
+      "internalType": "bool",
+      "name": "",
+      "type": "bool"
+    }]
   },
   {
-    type: "function",
-    name: "isKnownRoot",
-    inputs: [{ name: "_root", type: "bytes32" }],
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-  },
+    "type": "function",
+    "name": "isKnownRoot",
+    "inputs": [{ "name": "_root", "type": "bytes32" }],
+    "outputs": [{
+      "internalType": "bool",
+      "name": "",
+      "type": "bool"
+    }]
+  }
 ];
 var sherpaProxyABI = [
   {
-    type: "function",
-    name: "deposit",
-    inputs: [
-      { name: "_sherpa", type: "address" },
-      { name: "_commitment", type: "bytes32" },
-      { name: "_encryptedNote", type: "bytes" },
+    "type": "function",
+    "name": "deposit",
+    "inputs": [
+      { "name": "_sherpa", "type": "address" },
+      { "name": "_commitment", "type": "bytes32" },
+      { "name": "_encryptedNote", "type": "bytes" }
     ],
-    outputs: [],
+    "outputs": []
   },
   {
-    type: "function",
-    name: "withdraw",
-    inputs: [
-      { name: "_sherpa", type: "address" },
-      { name: "_proof", type: "bytes" },
-      { name: "_root", type: "bytes32" },
-      { name: "_nullifierHash", type: "bytes32" },
-      { name: "_recipient", type: "address" },
-      { name: "_relayer", type: "address" },
-      { name: "_fee", type: "uint256" },
-      { name: "_refund", type: "uint256" },
+    "type": "function",
+    "name": "withdraw",
+    "inputs": [
+      { "name": "_sherpa", "type": "address" },
+      { "name": "_proof", "type": "bytes" },
+      { "name": "_root", "type": "bytes32" },
+      { "name": "_nullifierHash", "type": "bytes32" },
+      { "name": "_recipient", "type": "address" },
+      { "name": "_relayer", "type": "address" },
+      { "name": "_fee", "type": "uint256" },
+      { "name": "_refund", "type": "uint256" }
     ],
-    outputs: [],
-  },
+    "outputs": []
+  }
 ];
 var state = {
   tokens: [
@@ -564,7 +443,7 @@ var state = {
       label: "AVAX",
       address: null,
       decimals: 18,
-      chainId: 43114,
+      chainId: 43114
     },
     {
       id: 2,
@@ -572,7 +451,7 @@ var state = {
       label: "AVAX",
       address: null,
       decimals: 18,
-      chainId: 43113,
+      chainId: 43113
     },
     {
       id: 3,
@@ -580,7 +459,7 @@ var state = {
       label: "TSD",
       address: "0x4fbf0429599460D327BD5F55625E30E4fC066095",
       decimals: 18,
-      chainId: 43114,
+      chainId: 43114
     },
     {
       id: 4,
@@ -588,7 +467,7 @@ var state = {
       label: "TSD",
       address: "0xc92bd11e6ecc0a4faf9c8bb5395ebb617d7e6698",
       decimals: 18,
-      chainId: 43113,
+      chainId: 43113
     },
     {
       id: 5,
@@ -596,8 +475,8 @@ var state = {
       label: "ELK",
       address: "0xE1C110E1B1b4A1deD0cAf3E42BfBdbB7b5d7cE1C",
       decimals: 18,
-      chainId: 43114,
-    },
+      chainId: 43114
+    }
   ],
   contracts: [
     {
@@ -607,7 +486,7 @@ var state = {
       token: "avax",
       allowance: Number.MAX_SAFE_INTEGER,
       value: 1e19,
-      chainId: 43113,
+      chainId: 43113
     },
     {
       label: "100",
@@ -616,7 +495,7 @@ var state = {
       token: "avax",
       allowance: Number.MAX_SAFE_INTEGER,
       value: 1e20,
-      chainId: 43113,
+      chainId: 43113
     },
     {
       label: "500",
@@ -625,7 +504,7 @@ var state = {
       token: "avax",
       allowance: Number.MAX_SAFE_INTEGER,
       value: 5e20,
-      chainId: 43113,
+      chainId: 43113
     },
     {
       label: "10",
@@ -634,7 +513,7 @@ var state = {
       token: "avax",
       allowance: Number.MAX_SAFE_INTEGER,
       value: 1e19,
-      chainId: 43114,
+      chainId: 43114
     },
     {
       label: "100",
@@ -643,7 +522,7 @@ var state = {
       token: "avax",
       allowance: Number.MAX_SAFE_INTEGER,
       value: 1e20,
-      chainId: 43114,
+      chainId: 43114
     },
     {
       label: "500",
@@ -652,7 +531,7 @@ var state = {
       token: "avax",
       allowance: Number.MAX_SAFE_INTEGER,
       value: 5e20,
-      chainId: 43114,
+      chainId: 43114
     },
     {
       label: "100",
@@ -661,7 +540,7 @@ var state = {
       token: "tsd",
       allowance: null,
       value: 1e20,
-      chainId: 43113,
+      chainId: 43113
     },
     {
       label: "1000",
@@ -670,7 +549,7 @@ var state = {
       token: "tsd",
       allowance: null,
       value: 1e21,
-      chainId: 43113,
+      chainId: 43113
     },
     {
       label: "10000",
@@ -679,7 +558,7 @@ var state = {
       token: "tsd",
       allowance: null,
       value: 1e22,
-      chainId: 43113,
+      chainId: 43113
     },
     {
       label: "100",
@@ -688,7 +567,7 @@ var state = {
       token: "tsd",
       allowance: null,
       value: 1e20,
-      chainId: 43114,
+      chainId: 43114
     },
     {
       label: "1000",
@@ -697,7 +576,7 @@ var state = {
       token: "tsd",
       allowance: null,
       value: 1e21,
-      chainId: 43114,
+      chainId: 43114
     },
     {
       label: "10000",
@@ -706,7 +585,7 @@ var state = {
       token: "tsd",
       allowance: null,
       value: 1e22,
-      chainId: 43114,
+      chainId: 43114
     },
     {
       label: "25",
@@ -715,7 +594,7 @@ var state = {
       token: "elk",
       allowance: null,
       value: 25e18,
-      chainId: 43114,
+      chainId: 43114
     },
     {
       label: "250",
@@ -724,7 +603,7 @@ var state = {
       token: "elk",
       allowance: null,
       value: 25e19,
-      chainId: 43114,
+      chainId: 43114
     },
     {
       label: "500",
@@ -733,8 +612,8 @@ var state = {
       token: "elk",
       allowance: null,
       value: 5e20,
-      chainId: 43114,
-    },
+      chainId: 43114
+    }
   ],
   selectedContract: "0x66F4f64f9Dce3eB1476af5E1f530228b8eD0a63f",
   currentNote: null,
@@ -750,7 +629,7 @@ var state = {
   complianceInfo: null,
   sherpaProxyContract: {
     fuji: "0xC0EB087ac8C732AC23c52A16627c4539d8966d79",
-    mainnet: "0x171Fb28ebfFcb2737E530E1Fd48CB4Ef12E5031e",
+    mainnet: "0x171Fb28ebfFcb2737E530E1Fd48CB4Ef12E5031e"
   },
   relayerMode: true,
   relayersList: [
@@ -760,7 +639,7 @@ var state = {
       name: "Sherpa Relayer",
       chainId: 43114,
       fee: 1,
-      status: {},
+      status: {}
     },
     {
       id: 2,
@@ -768,7 +647,7 @@ var state = {
       name: "Sherpa Fuji Relayer",
       chainId: 43113,
       fee: 1,
-      status: {},
+      status: {}
     },
     {
       id: 3,
@@ -776,7 +655,7 @@ var state = {
       name: "Local Test Relayer",
       chainId: 43114,
       fee: 0.1,
-      status: {},
+      status: {}
     },
     {
       id: 4,
@@ -784,32 +663,26 @@ var state = {
       name: "Local Test Relayer",
       chainId: 43113,
       fee: 0.1,
-      status: {},
-    },
+      status: {}
+    }
   ],
-  selectedRelayerId: 1,
+  selectedRelayerId: 1
 };
 var getters = {
   getNoteContractInfo: (parsedNote) => {
     return state.contracts.filter((contract) => {
-      return (
-        contract.value == parsedNote.amount &&
-        contract.token === parsedNote.currency &&
-        contract.chainId === parsedNote.netId
-      );
+      return contract.value == parsedNote.amount && contract.token === parsedNote.currency && contract.chainId === parsedNote.netId;
     })[0];
   },
   getSherpaProxyContract: (chainId) => {
-    return chainId == 43114
-      ? state.sherpaProxyContract.mainnet
-      : state.sherpaProxyContract.fuji;
+    return chainId == 43114 ? state.sherpaProxyContract.mainnet : state.sherpaProxyContract.fuji;
   },
   getRelayersList: (chainId) => {
     return state.relayersList.filter((relayer) => relayer.chainId === chainId);
   },
   getRelayerStatus: async (relayer) => {
     return await (await fetch(`${relayer.url}/v1/status`)).json();
-  },
+  }
 };
 
 // src/events.js
@@ -825,10 +698,10 @@ var networkConfig = {
     rpcUrls: {
       Main: {
         name: "Main",
-        url: "https://api.avax.network/ext/bc/C/rpc",
-      },
+        url: "https://api.avax.network/ext/bc/C/rpc"
+      }
     },
-    subgraph: "https://api.thegraph.com/subgraphs/name/sherpa-cash/sherpa",
+    subgraph: "https://api.thegraph.com/subgraphs/name/sherpa-cash/sherpa"
   },
   chainId43113: {
     currencyName: "AVAX",
@@ -836,11 +709,11 @@ var networkConfig = {
     rpcUrls: {
       Main: {
         name: "Main",
-        url: "https://api.avax-test.network/ext/bc/C/rpc",
-      },
+        url: "https://api.avax-test.network/ext/bc/C/rpc"
+      }
     },
-    subgraph: "https://api.thegraph.com/subgraphs/name/sherpa-cash/sherpa-fuji",
-  },
+    subgraph: "https://api.thegraph.com/subgraphs/name/sherpa-cash/sherpa-fuji"
+  }
 };
 var networkConfig_default = networkConfig;
 
@@ -850,15 +723,9 @@ var actions = {
   setErrorCode({ commit }, error) {
     commit("setError", error);
   },
-  async getStatisticsSubgraph(
-    { dispatch, commit, rootState },
-    contractAddress,
-    chainId
-  ) {
+  async getStatisticsSubgraph({ dispatch, commit, rootState }, contractAddress, chainId) {
     const events = [];
-    const contract = rootState.sherpa.contracts.find(
-      (contract2) => contract2.contractAddress === contractAddress
-    );
+    const contract = rootState.sherpa.contracts.find((contract2) => contract2.contractAddress === contractAddress);
     const amnt = contract.label;
     const curr = contract.token.toUpperCase();
     const dep = await subgraphDepositQuery(18, 0, amnt, curr, chainId);
@@ -870,7 +737,7 @@ var actions = {
       blockTime: new Date(parseInt(e.timestamp) * 1e3).getTime(),
       txHash: e.transactionHash,
       timestamp: e.timestamp,
-      dateTime: new Date(parseInt(e.timestamp) * 1e3),
+      dateTime: new Date(parseInt(e.timestamp) * 1e3)
     }));
     events.push(...standardDepositEvents);
     const lb = dep.length > 0 ? parseInt(dep[0].blockNumber) : 0;
@@ -880,9 +747,7 @@ var actions = {
     const events = [];
     const dep = [];
     const wit = [];
-    const contract = sherpaStats.contracts.find(
-      (contract2) => contract2.contractAddress === contractAddress
-    );
+    const contract = sherpaStats.contracts.find((contract2) => contract2.contractAddress === contractAddress);
     const amnt = contract.label;
     const curr = contract.token.toUpperCase();
     let offset = 0;
@@ -898,13 +763,7 @@ var actions = {
     }
     offset = 0;
     while (1) {
-      witReturn = await subgraphWithdrawalQuery(
-        1e3,
-        offset,
-        amnt,
-        curr,
-        chainId
-      );
+      witReturn = await subgraphWithdrawalQuery(1e3, offset, amnt, curr, chainId);
       if (witReturn.length === 0) {
         break;
       }
@@ -918,7 +777,7 @@ var actions = {
       blockTime: new Date(parseInt(e.timestamp) * 1e3).getTime(),
       txHash: e.transactionHash,
       timestamp: e.timestamp,
-      dateTime: new Date(parseInt(e.timestamp) * 1e3),
+      dateTime: new Date(parseInt(e.timestamp) * 1e3)
     }));
     const standardWithdrawalEvents = wit.map((e) => ({
       type: "Withdrawal",
@@ -928,7 +787,7 @@ var actions = {
       blockTime: new Date(parseInt(e.timestamp) * 1e3).getTime(),
       txHash: e.transactionHash,
       timestamp: e.timestamp,
-      dateTime: new Date(parseInt(e.timestamp) * 1e3),
+      dateTime: new Date(parseInt(e.timestamp) * 1e3)
     }));
     events.push(...standardDepositEvents);
     events.push(...standardWithdrawalEvents);
@@ -936,16 +795,13 @@ var actions = {
     const wb = wit[0] ? parseInt(wit[0].blockNumber) : 0;
     const lb = Math.max(db, wb);
     return { events, latestBlockFetched: lb, contractAddress };
-  },
+  }
 };
 function sortEventsByLeafIndex(a, b) {
   return a.leafIndex < b.leafIndex ? 1 : -1;
 }
 async function subgraphDepositQuery(first, offset, amnt, curr, chainId) {
-  const network = __spreadProps(
-    __spreadValues({}, networkConfig_default[`chainId${chainId}`]),
-    { id: Number(chainId) }
-  );
+  const network = __spreadProps(__spreadValues({}, networkConfig_default[`chainId${chainId}`]), { id: Number(chainId) });
   const APIURL = network.subgraph;
   const depQuery = import_graphql_request.gql`
     query subgraphDeposits($first: Int, $offset: Int, $curr: String, $amnt: String){
@@ -965,20 +821,13 @@ async function subgraphDepositQuery(first, offset, amnt, curr, chainId) {
     first,
     offset,
     curr,
-    amnt,
+    amnt
   };
-  const response = await (0, import_graphql_request.request)(
-    APIURL,
-    depQuery,
-    variables
-  ).catch((err) => console.log(err));
+  const response = await (0, import_graphql_request.request)(APIURL, depQuery, variables).catch((err) => console.log(err));
   return response.deposits;
 }
 async function subgraphWithdrawalQuery(first, offset, amnt, curr, chainId) {
-  const network = __spreadProps(
-    __spreadValues({}, networkConfig_default[`chainId${chainId}`]),
-    { id: Number(chainId) }
-  );
+  const network = __spreadProps(__spreadValues({}, networkConfig_default[`chainId${chainId}`]), { id: Number(chainId) });
   const APIURL = network.subgraph;
   const witQuery = import_graphql_request.gql`
     query subgraphWithdrawals($first: Int, $offset: Int, $curr: String, $amnt: String){
@@ -1000,13 +849,9 @@ async function subgraphWithdrawalQuery(first, offset, amnt, curr, chainId) {
     first,
     offset,
     curr,
-    amnt,
+    amnt
   };
-  const response = await (0, import_graphql_request.request)(
-    APIURL,
-    witQuery,
-    variables
-  ).catch((err) => console.log(err));
+  const response = await (0, import_graphql_request.request)(APIURL, witQuery, variables).catch((err) => console.log(err));
   return response.withdrawals;
 }
 
@@ -1021,12 +866,8 @@ var SherpaSDK = class {
     this.withdrawKeyDomain = withdrawKeyDomain || "";
   }
   async fetchCircuitAndProvingKey() {
-    const circuit = await (
-      await fetch(`${this.withdrawKeyDomain}/withdraw.json`)
-    ).json();
-    const provingKey = await (
-      await fetch(`${this.withdrawKeyDomain}/withdraw_proving_key.bin`)
-    ).arrayBuffer();
+    const circuit = await (await fetch(`${this.withdrawKeyDomain}/withdraw.json`)).json();
+    const provingKey = await (await fetch(`${this.withdrawKeyDomain}/withdraw_proving_key.bin`)).arrayBuffer();
     this.circuit = circuit;
     this.provingKey = provingKey;
   }
@@ -1034,25 +875,17 @@ var SherpaSDK = class {
     const selectedContractAddress = getters.getNoteContractInfo({
       amount: Number(valueWei),
       currency: selectedToken,
-      netId: this.chainId,
+      netId: this.chainId
     }).contractAddress;
-    const events = await actions.getEventsSubgraph(
-      state,
-      selectedContractAddress,
-      this.chainId
-    );
+    const events = await actions.getEventsSubgraph(state, selectedContractAddress, this.chainId);
     this.events = events;
     return events;
   }
   createDeposit(amount, token) {
-    const { noteString, commitment } = getNoteStringAndCommitment(
-      token,
-      amount,
-      this.chainId
-    );
+    const { noteString, commitment } = getNoteStringAndCommitment(token, amount, this.chainId);
     return {
       noteString,
-      commitment,
+      commitment
     };
   }
   getRelayerList() {
@@ -1060,14 +893,12 @@ var SherpaSDK = class {
   }
   async downloadNote(noteString, saveAs) {
     let blob = new Blob([noteString], {
-      type: "text/plain;charset=utf-8",
+      type: "text/plain;charset=utf-8"
     });
     const currentDate = new Date();
     const timestamp = currentDate.getTime();
     const [protocol, token, amount] = noteString.split("-");
-    const filename = `backup-${[protocol, token, amount, timestamp].join(
-      "-"
-    )}.txt`;
+    const filename = `backup-${[protocol, token, amount, timestamp].join("-")}.txt`;
     await saveAs(blob, filename);
   }
   async getCompliance(uniqueKey) {
@@ -1075,27 +906,21 @@ var SherpaSDK = class {
     const [_, selectedToken, valueWei] = uniqueKey.split("-");
     await this.fetchEvents(valueWei, selectedToken);
     const compliance = { deposit: null, withdrawl: null };
-    const depositEvent = this.events.events.find(
-      (e) => e.commitment == commitmentHex
-    );
+    const depositEvent = this.events.events.find((e) => e.commitment == commitmentHex);
     if (!depositEvent) {
       throw new Error("Could not find deposit");
     }
-    const { from } = await this.web3.eth.getTransaction(
-      depositEvent == null ? void 0 : depositEvent.txHash
-    );
+    const { from } = await this.web3.eth.getTransaction(depositEvent == null ? void 0 : depositEvent.txHash);
     compliance.deposit = {
       transaction: depositEvent == null ? void 0 : depositEvent.txHash,
       address: from,
-      id: commitmentHex,
+      id: commitmentHex
     };
-    const withdrawlEvent = this.events.events.find(
-      (e) => e.nullifierHash == nullifierHex
-    );
+    const withdrawlEvent = this.events.events.find((e) => e.nullifierHash == nullifierHex);
     compliance.withdrawl = {
       transaction: withdrawlEvent == null ? void 0 : withdrawlEvent.txHash,
       address: withdrawlEvent == null ? void 0 : withdrawlEvent.to,
-      id: nullifierHex,
+      id: nullifierHex
     };
     return compliance;
   }
@@ -1104,26 +929,19 @@ var SherpaSDK = class {
     const selectedContractAddress = getters.getNoteContractInfo({
       amount: Number(valueWei),
       currency: selectedToken,
-      netId: this.chainId,
+      netId: this.chainId
     }).contractAddress;
-    let pitContract = new this.web3.eth.Contract(
-      sherpaProxyABI,
-      sherpaProxyAddress
-    );
-    return await pitContract.methods
-      .deposit(selectedContractAddress, toHex(commitment), 0)
-      .send({
-        value: selectedToken === "avax" ? valueWei : 0,
-        from: fromAddress,
-        gas: 21e5,
-      });
+    let pitContract = new this.web3.eth.Contract(sherpaProxyABI, sherpaProxyAddress);
+    return await pitContract.methods.deposit(selectedContractAddress, toHex(commitment), 0).send({
+      value: selectedToken === "avax" ? valueWei : 0,
+      from: fromAddress,
+      gas: 21e5
+    });
   }
   async withdraw(withdrawNote, withdrawAddress, selfRelay, selectedRelayer) {
     var _a, _b;
     if (!this.events || !this.circuit || !this.provingKey) {
-      throw new Error(
-        "Sherpa SDK not initialized with events or circuir/proving key"
-      );
+      throw new Error("Sherpa SDK not initialized with events or circuir/proving key");
     }
     if (!selfRelay && !selectedRelayer) {
       throw new Error("A relayer must be selected to use non self relay");
@@ -1135,86 +953,46 @@ var SherpaSDK = class {
       throw new Error("The address has invalid format");
     }
     const contractInfo = getters.getNoteContractInfo(parsedNote);
-    let sherpaProxyContractAddress = getters.getSherpaProxyContract(
-      this.chainId
-    );
-    const pitContract = new this.web3.eth.Contract(
-      sherpaProxyABI,
-      sherpaProxyContractAddress
-    );
-    const sherpaContract = new this.web3.eth.Contract(
-      ethSherpaABI,
-      contractInfo.contractAddress
-    );
-    const depositEvents = this.events.events
-      .filter((e) => e.type === "Deposit")
-      .sort(sortEventsByLeafIndex);
-    if (
-      parsedNote.netId !== selectedRelayer.chainId &&
-      parsedNote.netId !== "*"
-    ) {
-      throw new Error("This relayer is for a different network");
+    let sherpaProxyContractAddress = getters.getSherpaProxyContract(this.chainId);
+    const pitContract = new this.web3.eth.Contract(sherpaProxyABI, sherpaProxyContractAddress);
+    const sherpaContract = new this.web3.eth.Contract(ethSherpaABI, contractInfo.contractAddress);
+    const depositEvents = this.events.events.filter((e) => e.type === "Deposit").sort(sortEventsByLeafIndex);
+    if (selectedRelayer) {
+      if (parsedNote.netId !== selectedRelayer.chainId && parsedNote.netId !== "*") {
+        throw new Error("This relayer is for a different network");
+      }
     }
     let totalFee = 0;
     let rewardAccount = 0;
     let refundAmount = 0;
     if (!selfRelay) {
       const relayerStatus = await getters.getRelayerStatus(selectedRelayer);
-      const relayerWithStatus = __spreadProps(
-        __spreadValues({}, selectedRelayer),
-        { status: relayerStatus }
-      );
-      totalFee = BigInt(
-        ((_a = relayerWithStatus.status) == null
-          ? void 0
-          : _a.tornadoServiceFee) * 1e4
-      )
-        .mul(BigInt(contractInfo.value))
-        .div(BigInt(1e6))
-        .add(BigInt(225 * 35e4));
-      rewardAccount =
-        (_b = relayerWithStatus.status) == null ? void 0 : _b.rewardAccount;
+      const relayerWithStatus = __spreadProps(__spreadValues({}, selectedRelayer), { status: relayerStatus });
+      totalFee = BigInt(((_a = relayerWithStatus.status) == null ? void 0 : _a.tornadoServiceFee) * 1e4).mul(BigInt(contractInfo.value)).div(BigInt(1e6)).add(BigInt(225 * 35e4));
+      rewardAccount = (_b = relayerWithStatus.status) == null ? void 0 : _b.rewardAccount;
       refundAmount = 0;
     }
-    const { proof, args } = await generateProofSherpa(
-      sherpaContract,
-      parsedNote.deposit,
-      withdrawAddress,
-      depositEvents,
-      this.circuit,
-      this.provingKey,
-      rewardAccount,
-      totalFee,
-      refundAmount
-    );
+    const { proof, args } = await generateProofSherpa(sherpaContract, parsedNote.deposit, withdrawAddress, depositEvents, this.circuit, this.provingKey, rewardAccount, totalFee, refundAmount);
     if (!selfRelay) {
       const requestBody = {
         proof,
         contract: contractInfo.contractAddress,
-        args: [args[0], args[1], args[2], args[3], args[4], args[5]],
+        args: [args[0], args[1], args[2], args[3], args[4], args[5]]
       };
-      return await import_axios.default.post(
-        selectedRelayer.url + "/v1/tornadoWithdraw",
-        requestBody
-      );
+      return await import_axios.default.post(selectedRelayer.url + "/v1/tornadoWithdraw", requestBody);
     } else {
-      if (parsedNote.netId !== (await this.web3.eth.getChainId())) {
-        throw new Error(
-          "Your wallet is not configured to the correct network."
-        );
+      if (parsedNote.netId !== await this.web3.eth.getChainId()) {
+        throw new Error("Your wallet is not configured to the correct network.");
       }
-      return await pitContract.methods
-        .withdraw(contractInfo.contractAddress, proof, ...args)
-        .send({
-          from: withdrawAddress,
-          gas: 1e6,
-        });
+      return await pitContract.methods.withdraw(contractInfo.contractAddress, proof, ...args).send({
+        from: withdrawAddress,
+        gas: 1e6
+      });
     }
   }
 };
 module.exports = __toCommonJS(sherpa_exports);
 // Annotate the CommonJS export names for ESM import in node:
-0 &&
-  (module.exports = {
-    SherpaSDK,
-  });
+0 && (module.exports = {
+  SherpaSDK
+});
