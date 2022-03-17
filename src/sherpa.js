@@ -103,6 +103,9 @@ export class SherpaSDK {
 
   async sendDeposit(valueWei, commitment, selectedToken, fromAddress) {
     const sherpaProxyAddress = getters.getSherpaProxyContract(this.netId);
+    if (this.chainId !== (await this.web3.eth.getChainId())) {
+      throw new Error("Cant make a deposit in wrong network");
+    }
     const selectedContractAddress = getters.getNoteContractInfo({
       amount: Number(valueWei),
       currency: selectedToken,
@@ -127,8 +130,11 @@ export class SherpaSDK {
         "Sherpa SDK not initialized with events or circuir/proving key"
       );
     }
-    if (!selfRelay && !selectedRelayer){
-      throw new Error("A relayer must be selected to use non self relay")
+    if (
+      !selfRelay &&
+      !(selectedRelayer && selectedRelayer.chainId && selectedRelayer.url)
+    ) {
+      throw new Error("A relayer must be selected to use non self relay");
     }
 
     const parsedNote = parseNote(withdrawNote);
@@ -164,23 +170,36 @@ export class SherpaSDK {
       throw new Error("This relayer is for a different network");
     }
     /** Calculate relayer info **/
-    let totalFee = 0
-    let rewardAccount = 0
-    let refundAmount = 0
+    let totalFee = 0;
+    let rewardAccount = 0;
+    let refundAmount = 0;
 
-    if(!selfRelay){
-      const relayerStatus = await getters.getRelayerStatus(selectedRelayer)
-      const relayerWithStatus = {...selectedRelayer, status:relayerStatus}
-      totalFee = BigInt(relayerWithStatus.status?.tornadoServiceFee*10000).mul(BigInt(contractInfo.value)).div(BigInt(1000000)).add(BigInt(225*350000))
-      rewardAccount = relayerWithStatus.status?.rewardAccount
-      refundAmount = 0 //parsedNote.amount * (10**18)
+    if (!selfRelay) {
+      const relayerStatus = await getters.getRelayerStatus(selectedRelayer);
+      const relayerWithStatus = { ...selectedRelayer, status: relayerStatus };
+      totalFee = BigInt(relayerWithStatus.status?.tornadoServiceFee * 10000)
+        .mul(BigInt(contractInfo.value))
+        .div(BigInt(1000000))
+        .add(BigInt(225 * 350000));
+      rewardAccount = relayerWithStatus.status?.rewardAccount;
+      refundAmount = 0; //parsedNote.amount * (10**18)
     }
 
     /** calculate proof **/
-    const { proof, args } = await generateProofSherpa(sherpaContract, parsedNote.deposit, withdrawAddress, depositEvents, this.circuit, this.provingKey, rewardAccount, totalFee, refundAmount)
+    const { proof, args } = await generateProofSherpa(
+      sherpaContract,
+      parsedNote.deposit,
+      withdrawAddress,
+      depositEvents,
+      this.circuit,
+      this.provingKey,
+      rewardAccount,
+      totalFee,
+      refundAmount
+    );
 
     /** execute **/
-    if(!selfRelay) {
+    if (!selfRelay) {
       //can replace web3 with a non wallet web3 here
       const requestBody = {
         proof: proof,
