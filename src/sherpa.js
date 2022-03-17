@@ -163,11 +163,13 @@ export class SherpaSDK {
       .sort(sortEventsByLeafIndex);
 
     /** more sanity checks **/
-    if (
-      parsedNote.netId !== selectedRelayer.chainId &&
-      parsedNote.netId !== "*"
-    ) {
-      throw new Error("This relayer is for a different network");
+    if (selectedRelayer) {
+      if (
+        parsedNote.netId !== selectedRelayer.chainId &&
+        parsedNote.netId !== "*"
+      ) {
+        throw new Error("This relayer is for a different network");
+      }
     }
     /** Calculate relayer info **/
     let totalFee = 0;
