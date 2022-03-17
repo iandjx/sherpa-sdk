@@ -930,6 +930,9 @@ var SherpaSDK = class {
       throw new Error("Cant make a deposit in wrong network");
     }
     const sherpaProxyAddress = getters.getSherpaProxyContract(this.netId);
+    if (this.chainId !== await this.web3.eth.getChainId()) {
+      throw new Error("Cant make a deposit in wrong network");
+    }
     const selectedContractAddress = getters.getNoteContractInfo({
       amount: Number(valueWei),
       currency: selectedToken,
@@ -947,7 +950,7 @@ var SherpaSDK = class {
     if (!this.events || !this.circuit || !this.provingKey) {
       throw new Error("Sherpa SDK not initialized with events or circuir/proving key");
     }
-    if (!selfRelay && !selectedRelayer) {
+    if (!selfRelay && !(selectedRelayer && selectedRelayer.chainId && selectedRelayer.url)) {
       throw new Error("A relayer must be selected to use non self relay");
     }
     const parsedNote = parseNote(withdrawNote);
